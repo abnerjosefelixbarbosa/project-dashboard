@@ -1,0 +1,20 @@
+body {
+    padding: 0 !important;
+    margin: 0 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.ajust {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
