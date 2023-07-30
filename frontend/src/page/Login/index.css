@@ -1,7 +1,7 @@
 .container_form {
     border: #000 solid 1px;
     border-radius: 10px;
-    width: 300px;
-    height: auto;
+    width: 300px !important;
+    height: auto !important;
     padding-top: 10px;
 }
