@@ -1,31 +1,30 @@
+import { Auth } from "@supabase/auth-ui-react";
 import { supabase } from "../../../../service/subabase";
-import { Form } from "react-bootstrap";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { isAuthenticated } from "../../../../service/auth";
 
 export function FormLogin() {
+  const navigate = useNavigate();
 
-  supabase.auth.signInWithOAuth({provider: "github"}).then(() => {
-  })
+  useEffect(() => {
+    isAuthenticated().then((value) => {
+      if (value) {
+        navigate("/project/list", {
+          replace: true,
+        });
+      }
+    });
+  });
 
   return (
     <>
-       <Form>
-        <Form.Group className="mb-3">
-          <Form.Label>User:</Form.Label>
-          <Form.Control type="text" />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Password:</Form.Label>
-          <Form.Control type="password" />
-        </Form.Group>
-      </Form>
-    </>
-  );
-}
-
-/*
-<Auth
+      <Auth
         supabaseClient={supabase}
         appearance={{ theme: ThemeSupa }}
         providers={["github"]}
       />
-*/
+    </>
+  );
+}

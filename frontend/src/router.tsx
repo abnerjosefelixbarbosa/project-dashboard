@@ -7,13 +7,13 @@ export function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />} >
-          <Route index element={<Login />}  />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Login />} />
           <Route path="/project">
-            <Route index element={<ListProjects />} />
+            <Route path="list" element={<ListProjects />} />
           </Route>
-          <Route path="*" element={<h1>Page not find</h1>} />
         </Route>
+        <Route path="*" element={<h1>Page not find</h1>} />
       </Routes>
     </BrowserRouter>
   );

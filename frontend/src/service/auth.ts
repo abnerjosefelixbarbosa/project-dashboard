@@ -1,24 +1,19 @@
-import { Session } from "@supabase/supabase-js";
 import { supabase } from "./subabase";
 
-interface SessionI {
-  data?: Session | null;
+export async function isAuthenticated() {
+    let isAuthenticated = false;    
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+        isAuthenticated = true
+    }
+    return isAuthenticated
 }
 
-export function auth() {
-  const sessionI: SessionI = {};
+export async function getUser() {
+    const { data } = await supabase.auth.getUser();
+    return data.user
+}
 
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    sessionI.data = session;
-  });
-
-  supabase.auth.onAuthStateChange((_event, session) => {
-    sessionI.data = session;
-  });
-
-  if (!sessionI.data?.user) {
-    return false
-  }
-
-  return true;
+export async function signOut() {
+    return await supabase.auth.signOut().then(() => true);
 }
