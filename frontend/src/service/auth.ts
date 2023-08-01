@@ -1,6 +1,6 @@
 import { supabase } from "./subabase";
 
-export async function isAuthenticated() {
+export async function authentication() {
     let isAuthenticated = false;    
     const { data } = await supabase.auth.getSession();
     if (data.session) {
