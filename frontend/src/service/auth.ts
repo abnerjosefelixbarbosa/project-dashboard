@@ -14,6 +14,6 @@ export async function getUser() {
     return data.user
 }
 
-export async function signOut() {
+export async function signout() {
     return await supabase.auth.signOut().then(() => true);
 }
