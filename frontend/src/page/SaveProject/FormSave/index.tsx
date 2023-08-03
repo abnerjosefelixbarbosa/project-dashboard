@@ -2,7 +2,7 @@ import { Button, Container, Form, Row } from "react-bootstrap";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { supabase } from "../../../service/subabase";
+import { save as serviceSave } from "../../../service/serviceProject";
 
 const schema = z.object({
   name: z.string(),
@@ -28,24 +28,9 @@ export function FromSave(user: UserData) {
     resolver: zodResolver(schema),
   });
 
-  async function save(data: FormSave) {
-    const { error, count } = await supabase.from("Project").insert({
-      name: data.name,
-      description: data.description,
-      start: data.start,
-      end: data.end,
-      budget: data.budget,
-      user_id: user.id,
-    });
-    if (error?.message) {
-      throw new Error(error.message);
-    }
-    return count
-  }
-
   function handleSave(data: FormSave) {
-    save(data)
-    .then((value) => console.log(value!))
+    serviceSave({...data, user_id: user.id, id: ""})
+    .then(() => console.log("save success"))
     .catch((e) => {
       console.log(e.message);
     })
