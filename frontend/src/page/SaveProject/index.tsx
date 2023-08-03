@@ -29,7 +29,7 @@ export function SaveProject() {
   return (
     <>
       <NavBar userName={user?.user_metadata.name} />
-      <FromSave />
+      <FromSave id={user?.id} />
     </>
   );
 }

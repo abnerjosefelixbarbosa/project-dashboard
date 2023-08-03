@@ -2,6 +2,7 @@ import { Button, Container, Form, Row } from "react-bootstrap";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { supabase } from "../../../service/subabase";
 
 const schema = z.object({
   name: z.string(),
@@ -13,30 +14,60 @@ const schema = z.object({
 
 type FormSave = z.infer<typeof schema>;
 
-export function FromSave() {
+interface UserData {
+  id: string;
+}
+
+export function FromSave(user: UserData) {
   const {
     register,
     handleSubmit,
-    setError,
-    formState: { errors, isSubmitting },
   } = useForm<FormSave>({
     mode: "all",
     reValidateMode: "onSubmit",
     resolver: zodResolver(schema),
   });
 
+  async function save(data: FormSave) {
+    const { error, count } = await supabase.from("Project").insert({
+      name: data.name,
+      description: data.description,
+      start: data.start,
+      end: data.end,
+      budget: data.budget,
+      user_id: user.id,
+    });
+    if (error?.message) {
+      throw new Error(error.message);
+    }
+    return count
+  }
+
+  function handleSave(data: FormSave) {
+    save(data)
+    .then((value) => console.log(value!))
+    .catch((e) => {
+      console.log(e.message);
+    })
+  }
+
   return (
     <>
       <Container className="container_project_save_form">
         <Row>
-          <Form>
+          <Form onSubmit={handleSubmit(handleSave)}>
             <Form.Group className="mb-3">
               <Form.Label>Name:</Form.Label>
-              <Form.Control type="text" placeholder="Enter name" />
+              <Form.Control
+                {...register("name")}
+                type="text"
+                placeholder="Enter name" 
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Description:</Form.Label>
               <Form.Control
+                { ...register("description") }
                 as="textarea"
                 placeholder="Enter description"
                 style={{ height: "100px" }}
@@ -44,15 +75,22 @@ export function FromSave() {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Start:</Form.Label>
-              <Form.Control type="date" />
+              <Form.Control
+                { ...register("start", { valueAsDate: true }) } 
+                type="date"
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>End:</Form.Label>
-              <Form.Control type="date" />
+              <Form.Control
+                { ...register("end", { valueAsDate: true }) }
+                type="date"
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Budget:</Form.Label>
               <Form.Control
+                { ...register("budget", { valueAsNumber: true }) }
                 type="text"
                 placeholder="Enter budget"
                 onChange={(e) => {
