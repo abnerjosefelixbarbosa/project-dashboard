@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getUser as serviceGetUser } from "../../service/auth";
 import { User } from "@supabase/supabase-js";
 import { NavBar } from "../../components/Navbar";
+import { List } from "./List";
 
 export function ListProjects() {
   const [user, setUser] = useState<User>();
@@ -26,6 +27,7 @@ export function ListProjects() {
   return (
     <>
       <NavBar userName={user?.user_metadata.name} />
+      <List  userId={user?.id} />
     </>
   );
 }

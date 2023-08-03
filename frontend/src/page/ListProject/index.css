@@ -1,0 +1,12 @@
+.container_project_list {
+    border: #000 solid 1px;
+    border-radius: 10px;
+    height: auto !important;
+    margin-top: 100px;
+}
+
+.table_project_list {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}

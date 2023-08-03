@@ -14,3 +14,14 @@ export async function save(data: Project) {
     throw new Error(error.message);
   }
 }
+
+export async function getAllByUserId(userId: string) {
+  const { data, error } = await supabase
+    .from("Project")
+    .select("*")
+    .eq("user_id", userId);
+  if (error?.message) {
+    throw new Error(error.message);
+  }
+  return data;
+}
