@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Table } from "react-bootstrap";
-import { getAllByUserId as serviceGetAllByUserId } from "../../../service/serviceProject";
+import { Button, Container, Row, Table } from "react-bootstrap";
+import {
+  getAllByUserId as serviceGetAllByUserId,
+  deleteById as serviceDeleteById,
+} from "../../../service/serviceProject";
 import { Project } from "../../../types/project";
+import { ModalDetails } from "../ModalDetails";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.css";
+import { ModalEdit } from "../ModalEdit";
 
 interface UserData {
   userId: string;
@@ -11,25 +18,24 @@ export function List({ userId }: UserData) {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    getAllByUserId();
-  }, [setProjects]);
+    serviceGetAllByUserId(userId).then((value) => setProjects(value!));
+  });
 
-  function getAllByUserId() {
-    //console.log(userId);
-    serviceGetAllByUserId(userId).then((value) => {
-      setProjects(value!);
-    });
+  function handleRemove(id: string) {
+    serviceDeleteById(id)
+      .then(() => toast.success("project removed"))
+      .catch((e) => toast.error(e.message));
   }
 
   return (
     <>
+      <ToastContainer />
       <Container className="container_project_list">
         <Row className="table_project_list">
           <Table striped bordered hover>
             <thead>
               <tr>
                 <th>name</th>
-                <th>description</th>
                 <th>start</th>
                 <th>end</th>
                 <th>budget</th>
@@ -43,7 +49,34 @@ export function List({ userId }: UserData) {
                       <span>{project.name}</span>
                     </td>
                     <td align="center">
-                      <span>{project.description}</span>
+                      <span>{project.start.toString()}</span>
+                    </td>
+                    <td align="center">
+                      <span>{project.end.toString()}</span>
+                    </td>
+                    <td align="center">
+                      <span>{project.budget}</span>
+                    </td>
+                    <td align="center">
+                      <ModalDetails description={project.description} />
+                    </td>
+                    <td align="center">
+                      <ModalEdit
+                        id={project.id}
+                        name={project.name}
+                        description={project.description}
+                        start={project.start}
+                        end={project.end}
+                        budget={project.budget}
+                      />
+                    </td>
+                    <td align="center">
+                      <Button
+                        variant="danger"
+                        onClick={() => handleRemove(project.id)}
+                      >
+                        Remove
+                      </Button>
                     </td>
                   </tr>
                 );

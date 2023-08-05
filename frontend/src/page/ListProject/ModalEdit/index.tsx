@@ -1,10 +1,9 @@
-import { Button, Container, Form, Row } from "react-bootstrap";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { save as serviceSave } from "../../../service/serviceProject";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/ReactToastify.css";
+import { z } from "zod";
+import { edit as serviceEdit } from "../../../service/serviceProject";
 
 const schema = z.object({
   name: z.string().min(1, "min 1 character").max(100, "max 100 characters"),
@@ -17,43 +16,63 @@ const schema = z.object({
   budget: z.number(),
 });
 
-type FormSave = z.infer<typeof schema>;
+type FormEdit = z.infer<typeof schema>;
 
-interface UserData {
-  id: string;
+interface ModalData {
+    id: string;
+    name: string;
+    description: string;
+    start: Date;
+    end: Date;
+    budget: number;
 }
 
-export function FromSave(user: UserData) {
+export function ModalEdit({
+  id,
+  name,
+  description,
+  start,
+  end,
+  budget,
+}: ModalData) {
+  const [show, setShow] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
-  } = useForm<FormSave>({
+  } = useForm<FormEdit>({
     mode: "all",
     reValidateMode: "onSubmit",
     resolver: zodResolver(schema),
   });
 
-  function handleSave(data: FormSave) {
-    serviceSave({ ...data, user_id: user.id, id: "" })
-      .then(() => toast.success("project saved"))
-      .catch((e) => {
-        if (e.message.includes("end date")) setError("end", { message: e.message }) 
-        else if (e.message) toast.error(e.message)
-      });
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  function handleEdit(data: FormEdit) {
+    serviceEdit({ ...data, id: id, user_id: "" })
+      .then(() => {
+        console.log("project edited")
+      })
+      .catch((e) => console.log(e.message));
   }
 
   return (
     <>
-      <ToastContainer />
-      <Container className="container_project_save_form">
-        <Row>
-          <Form onSubmit={handleSubmit(handleSave)}>
+      <Button variant="primary" onClick={handleShow}>
+        Edit
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit(handleEdit)}>
             <Form.Group className="mb-3">
               <Form.Label>Name:</Form.Label>
               <Form.Control
-                {...register("name")}
+                {...register("name", { value: name })}
                 type="text"
                 placeholder="Enter name"
               />
@@ -64,10 +83,11 @@ export function FromSave(user: UserData) {
             <Form.Group className="mb-3">
               <Form.Label>Description:</Form.Label>
               <Form.Control
-                {...register("description")}
+                {...register("description", { value: description })}
                 as="textarea"
                 placeholder="Enter description"
                 style={{ height: "100px" }}
+                defaultValue={description}
               />
               <Form.Text className="text_color">
                 {errors.description?.message}
@@ -96,7 +116,7 @@ export function FromSave(user: UserData) {
             <Form.Group className="mb-3">
               <Form.Label>Budget:</Form.Label>
               <Form.Control
-                {...register("budget", { valueAsNumber: true })}
+                {...register("budget", { valueAsNumber: true, value: budget })}
                 type="text"
                 placeholder="Enter budget"
                 onChange={(e) => {
@@ -112,12 +132,17 @@ export function FromSave(user: UserData) {
             </Form.Group>
             <div className="d-grid gap-2">
               <Button variant="primary" type="submit" size="lg">
-                Save
+                Edit
               </Button>
             </div>
           </Form>
-        </Row>
-      </Container>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" size="lg" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

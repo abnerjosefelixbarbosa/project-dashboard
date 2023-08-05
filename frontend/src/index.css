@@ -18,3 +18,7 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+.text_color {
+    color: #FF0000 !important;
+}
