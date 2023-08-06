@@ -34,7 +34,7 @@ export function NavBar({ userName }: UserData) {
   }
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary" sticky="top">
+    <Navbar bg="dark" data-bs-theme="dark" expand="lg" className="bg-body-tertiary" sticky="top">
       <Container>
         <Navbar.Brand>Hello {name}</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

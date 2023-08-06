@@ -12,9 +12,9 @@ const schema = z.object({
     .string()
     .min(1, "min 1 character")
     .max(200, "max 200 character"),
-  start: z.date().min(new Date(), "min future date"),
-  end: z.date().min(new Date(), "min future date"),
-  budget: z.number(),
+  start: z.coerce.date().min(new Date(), "min future date"),
+  end: z.coerce.date().min(new Date(), "min future date"),
+  budget: z.coerce.number(),
 });
 
 type FormSave = z.infer<typeof schema>;
@@ -37,10 +37,15 @@ export function FromSave(user: UserData) {
 
   function handleSave(data: FormSave) {
     serviceSave({ ...data, user_id: user.id, id: "" })
-      .then(() => toast.success("project saved"))
+      .then(() => {
+        toast.success("project saved");
+      })
       .catch((e) => {
-        if (e.message.includes("end date")) setError("end", { message: e.message }) 
-        else if (e.message) toast.error(e.message)
+        if (e.message.includes("end date")) {
+          setError("end", { message: e.message });
+        } else if (e.message) {
+          toast.error(e.message);
+        }
       });
   }
 
@@ -76,7 +81,7 @@ export function FromSave(user: UserData) {
             <Form.Group className="mb-3">
               <Form.Label>Start:</Form.Label>
               <Form.Control
-                {...register("start", { valueAsDate: true })}
+                {...register("start")}
                 type="date"
               />
               <Form.Text className="text_color">
@@ -86,7 +91,7 @@ export function FromSave(user: UserData) {
             <Form.Group className="mb-3">
               <Form.Label>End:</Form.Label>
               <Form.Control
-                {...register("end", { valueAsDate: true })}
+                {...register("end")}
                 type="date"
               />
               <Form.Text className="text_color">
@@ -96,7 +101,7 @@ export function FromSave(user: UserData) {
             <Form.Group className="mb-3">
               <Form.Label>Budget:</Form.Label>
               <Form.Control
-                {...register("budget", { valueAsNumber: true })}
+                {...register("budget")}
                 type="text"
                 placeholder="Enter budget"
                 onChange={(e) => {

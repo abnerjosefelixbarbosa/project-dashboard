@@ -2,7 +2,9 @@ import { Project } from "../types/project";
 import { supabase } from "./subabase";
 
 export async function save(data: Project) {
-  if (data.end <= data.start) throw new Error("end date invalid");
+  if (data.end <= data.start) {
+    throw new Error("end date invalid");
+  }
   const { error } = await supabase.from("project").insert({
     id: crypto.randomUUID(),
     name: data.name,
@@ -26,7 +28,9 @@ export async function getAllByUserId(userId: string) {
 }
 
 export async function edit(data: Project) {
-  if (data.end <= data.start) throw new Error("end date invalid");
+  if (data.end <= data.start) {
+    throw new Error("end date invalid");
+  }
   const { error } = await supabase.from("project").update({
     name: data.name,
     description: data.description,

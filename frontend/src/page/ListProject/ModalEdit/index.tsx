@@ -4,27 +4,29 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { edit as serviceEdit } from "../../../service/serviceProject";
+import "react-toastify/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 const schema = z.object({
-  name: z.string().min(1, "min 1 character").max(100, "max 100 characters"),
+  name: z.string().max(100, "max 100 characters").nonempty("name empty"),
   description: z
     .string()
-    .min(1, "min 1 character")
-    .max(200, "max 200 character"),
-  start: z.date().min(new Date(), "min future date"),
-  end: z.date().min(new Date(), "min future date"),
-  budget: z.number(),
+    .max(200, "max 200 character")
+    .nonempty("description empty"),
+  start: z.coerce.date().min(new Date(), "min future date"),
+  end: z.coerce.date().min(new Date(), "min future date"),
+  budget: z.coerce.number(),
 });
 
 type FormEdit = z.infer<typeof schema>;
 
 interface ModalData {
-    id: string;
-    name: string;
-    description: string;
-    start: Date;
-    end: Date;
-    budget: number;
+  id: string;
+  name: string;
+  description: string;
+  start: Date;
+  end: Date;
+  budget: number;
 }
 
 export function ModalEdit({
@@ -39,6 +41,7 @@ export function ModalEdit({
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<FormEdit>({
     mode: "all",
@@ -51,14 +54,20 @@ export function ModalEdit({
 
   function handleEdit(data: FormEdit) {
     serviceEdit({ ...data, id: id, user_id: "" })
-      .then(() => {
-        console.log("project edited")
-      })
-      .catch((e) => console.log(e.message));
+      .then(() => toast.success("project edited"))
+      .catch((e) => {
+        if (e.message.includes("end date")) {
+          setError("end", { message: e.message });
+        } else if (e.message) {
+          toast.error(e.message);
+        }
+      });
   }
 
   return (
     <>
+      <ToastContainer />
+
       <Button variant="primary" onClick={handleShow}>
         Edit
       </Button>
@@ -72,9 +81,10 @@ export function ModalEdit({
             <Form.Group className="mb-3">
               <Form.Label>Name:</Form.Label>
               <Form.Control
-                {...register("name", { value: name })}
+                {...register("name")}
                 type="text"
                 placeholder="Enter name"
+                defaultValue={name}
               />
               <Form.Text className="text_color">
                 {errors.name?.message}
@@ -83,7 +93,7 @@ export function ModalEdit({
             <Form.Group className="mb-3">
               <Form.Label>Description:</Form.Label>
               <Form.Control
-                {...register("description", { value: description })}
+                {...register("description")}
                 as="textarea"
                 placeholder="Enter description"
                 style={{ height: "100px" }}
@@ -96,8 +106,9 @@ export function ModalEdit({
             <Form.Group className="mb-3">
               <Form.Label>Start:</Form.Label>
               <Form.Control
-                {...register("start", { valueAsDate: true })}
+                {...register("start")}
                 type="date"
+                defaultValue={start.toString()}
               />
               <Form.Text className="text_color">
                 {errors.start?.message}
@@ -106,8 +117,9 @@ export function ModalEdit({
             <Form.Group className="mb-3">
               <Form.Label>End:</Form.Label>
               <Form.Control
-                {...register("end", { valueAsDate: true })}
+                {...register("end")}
                 type="date"
+                defaultValue={end.toString()}
               />
               <Form.Text className="text_color">
                 {errors.end?.message}
@@ -116,7 +128,7 @@ export function ModalEdit({
             <Form.Group className="mb-3">
               <Form.Label>Budget:</Form.Label>
               <Form.Control
-                {...register("budget", { valueAsNumber: true, value: budget })}
+                {...register("budget")}
                 type="text"
                 placeholder="Enter budget"
                 onChange={(e) => {
@@ -125,6 +137,7 @@ export function ModalEdit({
                   value = value.replace(/(\d+)(\d{2})$/, "$1.$2");
                   e.target.value = value;
                 }}
+                defaultValue={budget}
               />
               <Form.Text className="text_color">
                 {errors.budget?.message}
