@@ -54,7 +54,9 @@ export function ModalEdit({
 
   function handleEdit(data: FormEdit) {
     serviceEdit({ ...data, id: id, user_id: "" })
-      .then(() => toast.success("project edited"))
+      .then(() => {    
+        toast.success("project edited");     
+      })
       .catch((e) => {
         if (e.message.includes("end date")) {
           setError("end", { message: e.message });

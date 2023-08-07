@@ -4,22 +4,25 @@ import {
   getAllByUserId as serviceGetAllByUserId,
   deleteById as serviceDeleteById,
 } from "../../../service/serviceProject";
+import { getUser as serviceGetUser } from "../../../service/auth";
 import { Project } from "../../../types/project";
 import { ModalDetails } from "../ModalDetails";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import { ModalEdit } from "../ModalEdit";
 
-interface UserData {
-  userId: string;
-}
-
-export function List({ userId }: UserData) {
+export function List() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    serviceGetAllByUserId(userId).then((value) => setProjects(value!));
-  });
+    serviceGetUser()
+      .then((data) => data?.id)
+      .then((id) => {
+        serviceGetAllByUserId(id!).then((value) => {
+          setProjects(value);
+        });
+      });
+  }, [setProjects]);
 
   function handleRemove(id: string) {
     serviceDeleteById(id)

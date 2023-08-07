@@ -3,4 +3,11 @@
     border-radius: 10px;
     width: 300px !important;
     height: auto !important;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.sigin_button {
+    padding-right: 10px;
+    padding-left: 10px;
 }

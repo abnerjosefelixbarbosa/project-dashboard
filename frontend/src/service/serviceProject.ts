@@ -24,7 +24,8 @@ export async function getAllByUserId(userId: string) {
     .eq("user_id", userId)
     .limit(5);
   if (error) throw error;
-  return data;
+  const projects: Project[] = data! 
+  return projects;
 }
 
 export async function edit(data: Project) {

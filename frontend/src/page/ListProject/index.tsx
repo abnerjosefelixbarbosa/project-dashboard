@@ -11,23 +11,19 @@ export function ListProjects() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkUser();
-  }, [setUser]);
-
-  function checkUser() {
     serviceGetUser().then((data) => {
       if (data) {
-        setUser(data!);
+        setUser(data);
       } else {
         navigate("/no-authentication");
       }
     });
-  }
+  }, [setUser]);
 
   return (
     <>
-      <NavBar userName={user?.user_metadata.name} />
-      <List  userId={user?.id} />
+      <NavBar />
+      <List />
     </>
   );
 }
