@@ -6,45 +6,37 @@ import { ModalDetails } from "../ModalDetails";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import { ModalEdit } from "../ModalEdit";
-import { User } from "@supabase/supabase-js";
 import { getUser } from "../../../service/auth";
 
 export function List() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    checkUser();
     handleListProjects();
   }, [loading]);
 
-  function checkUser() {
-    getUser().then((user) => {
-      if (user !== null) {
-        setUser(user);
-      }
-    });
-  }
-
-  function handleListProjects() {
-    setLoading(false);
-    getAllByUserId(user?.id)
-      .then((projects) => {
-        setProjects(projects);
-      })
-      .finally(() => {
-        setLoading(true);
-      })
+  async function handleListProjects() {
+    getUser()
+    .then((user) => {
+      return getAllByUserId(user?.id).then((projects) => projects)
+    }).then((projects) => {
+      setProjects(projects);
+    })
   }
 
   function handleRemove(id: string) {
+    setLoading(false)
     deleteById(id)
       .then(() => {
+        setLoading(false)
         toast.success("project removed");
       })
       .catch((e) => {
         toast.error(e.message);
+      })
+      .finally(() => {
+        setLoading(true)
       });
   }
 

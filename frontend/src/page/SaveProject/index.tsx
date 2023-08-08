@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect,  } from "react";
 import { NavBar } from "../../components/Navbar";
-import { useLocation, useNavigate } from "react-router-dom";
-import { User } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
 import "./index.css";
 import { FromSave } from "./FormSave";
+import { getUser } from "../../service/auth";
 
 export function SaveProject() {
-  const [user, setUser] = useState<User>();
   const navigate = useNavigate();
-  const location = useLocation()
 
   useEffect(() => {
     checkUser();
-  }, [user]);
+  }, []);
 
   function checkUser() {
-    
+    getUser().then((user) => {
+      if (user === null) {
+        navigate("/no-authentication")
+      }
+    })
   }
   
   return (

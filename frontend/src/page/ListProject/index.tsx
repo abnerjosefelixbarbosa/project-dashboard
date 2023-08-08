@@ -14,6 +14,7 @@ export function ListProjects() {
 
   function checkUser() {
     getUser().then((user) => {
+      console.log(user)
       if (user === null) {
         navigate("/no-authentication");
       } 
