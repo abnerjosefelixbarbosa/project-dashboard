@@ -2,9 +2,12 @@ import { Button, Container, Form, Row } from "react-bootstrap";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { save as serviceSave } from "../../../service/serviceProject";
+import { save } from "../../../service/serviceProject";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
+import { useEffect, useState } from "react";
+import { User } from "@supabase/supabase-js";
+import { getUser } from "../../../service/auth";
 
 const schema = z.object({
   name: z.string().min(1, "min 1 character").max(100, "max 100 characters"),
@@ -19,11 +22,7 @@ const schema = z.object({
 
 type FormSave = z.infer<typeof schema>;
 
-interface UserData {
-  id: string;
-}
-
-export function FromSave(user: UserData) {
+export function FromSave() {
   const {
     register,
     handleSubmit,
@@ -34,9 +33,22 @@ export function FromSave(user: UserData) {
     reValidateMode: "onSubmit",
     resolver: zodResolver(schema),
   });
+  const [user, setUser] = useState<User>();
+  
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  function checkUser() {
+    getUser().then((user) => {
+      if (user !== null) {
+        setUser(user);
+      } 
+    });
+  }
 
   function handleSave(data: FormSave) {
-    serviceSave({ ...data, user_id: user.id, id: "" })
+    save({ ...data, user_id: `${user?.id}`, id: ""})
       .then(() => {
         toast.success("project saved");
       })

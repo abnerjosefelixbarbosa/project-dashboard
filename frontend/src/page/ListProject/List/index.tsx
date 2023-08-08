@@ -1,33 +1,51 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Row, Table } from "react-bootstrap";
-import {
-  getAllByUserId as serviceGetAllByUserId,
-  deleteById as serviceDeleteById,
-} from "../../../service/serviceProject";
-import { getUser as serviceGetUser } from "../../../service/auth";
+import { deleteById, getAllByUserId } from "../../../service/serviceProject";
 import { Project } from "../../../types/project";
 import { ModalDetails } from "../ModalDetails";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import { ModalEdit } from "../ModalEdit";
+import { User } from "@supabase/supabase-js";
+import { getUser } from "../../../service/auth";
 
 export function List() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    serviceGetUser()
-      .then((data) => data?.id)
-      .then((id) => {
-        serviceGetAllByUserId(id!).then((value) => {
-          setProjects(value);
-        });
-      });
-  }, [setProjects]);
+    checkUser();
+    handleListProjects();
+  }, [loading]);
+
+  function checkUser() {
+    getUser().then((user) => {
+      if (user !== null) {
+        setUser(user);
+      }
+    });
+  }
+
+  function handleListProjects() {
+    setLoading(false);
+    getAllByUserId(user?.id)
+      .then((projects) => {
+        setProjects(projects);
+      })
+      .finally(() => {
+        setLoading(true);
+      })
+  }
 
   function handleRemove(id: string) {
-    serviceDeleteById(id)
-      .then(() => toast.success("project removed"))
-      .catch((e) => toast.error(e.message));
+    deleteById(id)
+      .then(() => {
+        toast.success("project removed");
+      })
+      .catch((e) => {
+        toast.error(e.message);
+      });
   }
 
   return (

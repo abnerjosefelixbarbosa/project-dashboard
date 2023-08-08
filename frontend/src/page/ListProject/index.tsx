@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./index.css";
-import { useNavigate } from "react-router-dom";
-import { getUser as serviceGetUser } from "../../service/auth";
-import { User } from "@supabase/supabase-js";
 import { NavBar } from "../../components/Navbar";
 import { List } from "./List";
+import { useNavigate } from "react-router-dom";
+import { getUser } from "../../service/auth";
 
 export function ListProjects() {
-  const [user, setUser] = useState<User>();
   const navigate = useNavigate();
 
   useEffect(() => {
-    serviceGetUser().then((data) => {
-      if (data) {
-        setUser(data);
-      } else {
+    checkUser();
+  }, []);
+
+  function checkUser() {
+    getUser().then((user) => {
+      if (user === null) {
         navigate("/no-authentication");
-      }
+      } 
     });
-  }, [setUser]);
+  }
 
   return (
     <>

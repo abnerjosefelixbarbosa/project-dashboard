@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { authentication as serviceGetSession } from "../../../service/auth";
+import { getSession } from "../../../service/auth";
 import { Auth } from "@supabase/auth-ui-react";
 import { supabase } from "../../../service/subabase";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
@@ -10,17 +10,21 @@ export function FormLogin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    serviceGetSession().then((value) => {
-      if (value) {
+    handleSession()
+  }, []);
+
+  function handleSession() {
+    getSession().then((data) => {
+      if (data !== null) {
         navigate("/project/list", {
           replace: true,
           state: {
-            user: value
+            user: data.user
           }
         });
       }
     });
-  });
+  }
 
   return (
     <>

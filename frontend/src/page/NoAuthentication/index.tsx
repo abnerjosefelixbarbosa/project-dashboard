@@ -1,8 +1,19 @@
 import { Button, Card, Container } from "react-bootstrap";
 import "./index.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "../../service/auth";
 
 export function NoAuthentication() {
+  const navigate = useNavigate();
+
+  function handleBackLogin() {
+    signOut().then(() => {
+      navigate("/", {
+        replace: true,
+      });
+    });
+  }
+
   return (
     <>
       <div className="ajust">
@@ -12,7 +23,7 @@ export function NoAuthentication() {
             <Card.Body className="center">go back to login</Card.Body>
             <Card.Footer>
               <div className="d-grid gap-2">
-                <Button variant="primary" size="lg" as={Link} to={"/"}>
+                <Button variant="primary" size="lg" onClick={handleBackLogin}>
                   Back Login
                 </Button>
               </div>

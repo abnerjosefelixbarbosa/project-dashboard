@@ -22,10 +22,9 @@ export async function getAllByUserId(userId: string) {
     .from("project")
     .select("*")
     .eq("user_id", userId)
-    .limit(5);
+    .order("name");
   if (error) throw error;
-  const projects: Project[] = data! 
-  return projects;
+  return data;
 }
 
 export async function edit(data: Project) {
