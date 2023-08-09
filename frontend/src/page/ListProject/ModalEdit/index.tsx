@@ -54,12 +54,15 @@ export function ModalEdit({
 
   function handleEdit(data: FormEdit) {
     serviceEdit({ ...data, id: id, user_id: "" })
-      .then(() => {    
-        toast.success("project edited");  
+      .then(() => {
+        handleClose();
+        toast.success("project edited", {
+          position: "top-center",
+          autoClose: 2000
+        });
         setTimeout(() => {
-          handleClose();
           window.location.reload();
-        }, 6000);
+        }, 3000);
       })
       .catch((e) => {
         if (e.message.includes("end date")) {
@@ -67,7 +70,7 @@ export function ModalEdit({
         } else if (e.message) {
           toast.error(e.message);
         }
-      })  
+      });
   }
 
   return (

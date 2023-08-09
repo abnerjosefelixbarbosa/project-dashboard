@@ -1,10 +1,8 @@
 import { Card, Container } from "react-bootstrap";
-import "./index.css";
 import { NavbarLandingPage } from "../../components/NavbarLandingPage";
 import { Footer } from "../../components/Footer/index,";
 
-export function Home() {
-
+export function About() {
   return (
     <>
       <NavbarLandingPage />

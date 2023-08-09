@@ -18,9 +18,6 @@ export function FormLogin() {
       if (data !== null) {
         navigate("/project/list", {
           replace: true,
-          state: {
-            user: data.user
-          }
         });
       }
     });

@@ -8,7 +8,7 @@ export function NoAuthentication() {
 
   function handleBackLogin() {
     signOut().then(() => {
-      navigate("/", {
+      navigate("/login", {
         replace: true,
       });
     });

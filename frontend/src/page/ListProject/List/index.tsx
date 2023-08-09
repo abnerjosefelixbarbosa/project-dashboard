@@ -26,11 +26,13 @@ export function List() {
   }
 
   function handleRemove(id: string) {
-    setLoading(false)
     deleteById(id)
       .then(() => {
         setLoading(false)
-        toast.success("project removed");
+        toast.success("project removed", {
+          autoClose: 2000,
+          position: "top-center",
+        });
       })
       .catch((e) => {
         toast.error(e.message);

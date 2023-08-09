@@ -50,7 +50,10 @@ export function FromSave() {
   function handleSave(data: FormSave) {
     save({ ...data, user_id: `${user?.id}`, id: ""})
       .then(() => {
-        toast.success("project saved");
+        toast.success("project saved", {
+          autoClose: 2000,
+          position: "top-center",
+        });
       })
       .catch((e) => {
         if (e.message.includes("end date")) {

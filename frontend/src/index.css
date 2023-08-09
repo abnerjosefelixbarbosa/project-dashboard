@@ -13,6 +13,11 @@ body {
     align-items: center;
 }
 
+.ajust2 {
+    margin-top: 150px;
+    margin-bottom: 150px;
+}
+
 .center {
     display: flex;
     align-items: center;
@@ -21,4 +26,20 @@ body {
 
 .text_color {
     color: #FF0000 !important;
+}
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.9);
+    height: 100px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    position: fixed;
+    margin-top: 100px;
+    overflow: hidden !important;
+}
+
+.top_nav {
+    overflow: hidden !important;
 }

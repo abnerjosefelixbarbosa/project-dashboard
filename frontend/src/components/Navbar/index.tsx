@@ -4,24 +4,13 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { signOut } from "../../service/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
 
 export function NavBar() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<User>();
 
-  useEffect(() => {
-    checkUser();
-  }, [user]);
-
-  function checkUser() {
-    
-  }
-
-  function handleSignout() {
+  function handleSignOut() {
     signOut().then(() => {
-      navigate("/", {
+      navigate("/login", {
         replace: true,
       });
     });
@@ -57,7 +46,7 @@ export function NavBar() {
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link onClick={handleSignout}>Signout</Nav.Link>
+            <Nav.Link onClick={handleSignOut}>SignOut</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
