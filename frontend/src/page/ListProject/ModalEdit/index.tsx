@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { edit as serviceEdit } from "../../../service/serviceProject";
+import { edit } from "../../../service/serviceProject";
 import "react-toastify/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -27,6 +27,7 @@ interface ModalData {
   start: Date;
   end: Date;
   budget: number;
+  userId: string;
 }
 
 export function ModalEdit({
@@ -36,6 +37,7 @@ export function ModalEdit({
   start,
   end,
   budget,
+  userId
 }: ModalData) {
   const [show, setShow] = useState<boolean>(false);
   const {
@@ -53,7 +55,7 @@ export function ModalEdit({
   const handleShow = () => setShow(true);
 
   function handleEdit(data: FormEdit) {
-    serviceEdit({ ...data, id: id, user_id: "" })
+    edit({ ...data, id: id, user_id: userId })
       .then(() => {
         handleClose();
         toast.success("project edited", {

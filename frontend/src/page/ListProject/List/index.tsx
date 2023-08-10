@@ -13,22 +13,18 @@ export function List() {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    handleListProjects();
-  }, [loading]);
-
-  async function handleListProjects() {
     getUser()
     .then((user) => {
       return getAllByUserId(user?.id).then((projects) => projects)
     }).then((projects) => {
       setProjects(projects);
     })
-  }
+  }, [loading]);
 
   function handleRemove(id: string) {
+    setLoading(false)
     deleteById(id)
       .then(() => {
-        setLoading(false)
         toast.success("project removed", {
           autoClose: 2000,
           position: "top-center",
@@ -83,6 +79,7 @@ export function List() {
                         start={project.start}
                         end={project.end}
                         budget={project.budget}
+                        userId={project.user_id}
                       />
                     </td>
                     <td align="center">

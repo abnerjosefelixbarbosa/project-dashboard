@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 
 interface ModalData {
   description: string;
@@ -21,13 +21,20 @@ export function ModalDetails({ description }: ModalData) {
         <Modal.Header closeButton>
           <Modal.Title>Description</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="ajust3">
-          {description}
+        <Modal.Body>
+          <FloatingLabel controlId="floatingTextarea2" label="Description">
+            <Form.Control
+              as="textarea"
+              placeholder="Leave a comment here"
+              style={{ height: "100px" }}
+              value={description}
+            />
+          </FloatingLabel>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="secondary" size="lg" onClick={handleClose}>
-              Close
-            </Button>
+          <Button variant="secondary" size="lg" onClick={handleClose}>
+            Close
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

@@ -29,7 +29,7 @@ export function Home() {
             <Card.Body>
               <Card.Title className="text-center">Welcome</Card.Title>
               <Card.Title className="text-center">
-                Start a project by doing sign In
+                To start a project, do sign in
               </Card.Title>
             </Card.Body>
           </Card>

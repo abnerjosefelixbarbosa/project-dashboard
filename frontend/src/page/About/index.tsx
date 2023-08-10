@@ -11,9 +11,10 @@ export function About() {
           <Card>
             <Card.Header className="text-center">Project Dashboard</Card.Header>
             <Card.Body>
-              <Card.Title className="text-center">Welcome</Card.Title>
+              <Card.Title className="text-center">About</Card.Title>
               <Card.Title className="text-center">
-                Start a project by doing sign In
+                check the deadlines of your projects
+                to have full control of activities.
               </Card.Title>
             </Card.Body>
           </Card>
