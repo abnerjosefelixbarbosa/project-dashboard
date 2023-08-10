@@ -34,21 +34,17 @@ export function FromSave() {
     resolver: zodResolver(schema),
   });
   const [user, setUser] = useState<User>();
-  
+
   useEffect(() => {
-    checkUser();
+    getUser().then((value) => {
+      if (value !== null) {
+        setUser(value);
+      } 
+    })
   }, []);
 
-  function checkUser() {
-    getUser().then((user) => {
-      if (user !== null) {
-        setUser(user);
-      } 
-    });
-  }
-
   function handleSave(data: FormSave) {
-    save({ ...data, user_id: `${user?.id}`, id: ""})
+    save({ ...data, user_id: `${user?.id}`, id: "" })
       .then(() => {
         toast.success("project saved", {
           autoClose: 2000,
@@ -95,20 +91,14 @@ export function FromSave() {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Start:</Form.Label>
-              <Form.Control
-                {...register("start")}
-                type="date"
-              />
+              <Form.Control {...register("start")} type="date" />
               <Form.Text className="text_color">
                 {errors.start?.message}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>End:</Form.Label>
-              <Form.Control
-                {...register("end")}
-                type="date"
-              />
+              <Form.Control {...register("end")} type="date" />
               <Form.Text className="text_color">
                 {errors.end?.message}
               </Form.Text>

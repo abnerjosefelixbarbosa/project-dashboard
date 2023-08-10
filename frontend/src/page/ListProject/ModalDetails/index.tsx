@@ -21,7 +21,9 @@ export function ModalDetails({ description }: ModalData) {
         <Modal.Header closeButton>
           <Modal.Title>Description</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{description}</Modal.Body>
+        <Modal.Body className="ajust3">
+          {description}
+        </Modal.Body>
         <Modal.Footer>
             <Button variant="secondary" size="lg" onClick={handleClose}>
               Close

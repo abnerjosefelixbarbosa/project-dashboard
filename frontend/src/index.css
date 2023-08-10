@@ -18,6 +18,13 @@ body {
     margin-bottom: 150px;
 }
 
+.ajust3 {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    display: flex;
+    position: relative;
+}
+
 .center {
     display: flex;
     align-items: center;
