@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
+import { Button, Card, Modal } from "react-bootstrap";
 
 interface ModalData {
   description: string;
@@ -22,14 +22,12 @@ export function ModalDetails({ description }: ModalData) {
           <Modal.Title>Description</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FloatingLabel controlId="floatingTextarea2" label="Description">
-            <Form.Control
-              as="textarea"
-              placeholder="Leave a comment here"
-              style={{ height: "100px" }}
-              value={description}
-            />
-          </FloatingLabel>
+          <Card>
+            <Card.Header className="text-center">Description</Card.Header>
+            <Card.Body>
+              {description}
+            </Card.Body>
+          </Card>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" size="lg" onClick={handleClose}>

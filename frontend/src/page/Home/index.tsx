@@ -28,9 +28,8 @@ export function Home() {
             <Card.Header className="text-center">Project Dashboard</Card.Header>
             <Card.Body>
               <Card.Title className="text-center">Welcome</Card.Title>
-              <Card.Title className="text-center">
-                To start a project, do sign in
-              </Card.Title>
+              <br />
+              <div className="text-center">To start a project, do sign in</div>
             </Card.Body>
           </Card>
         </Container>
