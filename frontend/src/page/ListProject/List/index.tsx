@@ -15,7 +15,7 @@ export function List() {
   useEffect(() => {
     getUser()
     .then((user) => {
-      return getAllByUserId(user?.id).then((projects) => projects)
+      return getAllByUserId(user!.id).then((projects) => projects)
     }).then((projects) => {
       setProjects(projects);
     })
