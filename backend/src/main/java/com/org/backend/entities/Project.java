@@ -36,6 +36,9 @@ public class Project implements Serializable {
 	@Column(nullable = false)
 	private BigDecimal budget;
 	@ManyToOne
-	@JoinColumn(name = "account_id", nullable = false)
+	@JoinColumn(
+		name = "account_id",
+		nullable = false
+	)
 	private Account account;
 }
