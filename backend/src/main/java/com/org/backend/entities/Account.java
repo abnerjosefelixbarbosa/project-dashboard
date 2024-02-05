@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -28,7 +30,8 @@ public class Account implements Serializable {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	@Column(nullable = false)
-	private Date date_creation;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date date_creation = new Date();
 	@Column(nullable = false)
 	@Enumerated
 	private Level level = Level.BASIC;

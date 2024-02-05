@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,8 +32,10 @@ public class Project implements Serializable {
 	@Column(nullable = false)
 	private String description;
 	@Column(nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date_start;
 	@Column(nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date_end;
 	@Column(nullable = false)
 	private BigDecimal budget;
