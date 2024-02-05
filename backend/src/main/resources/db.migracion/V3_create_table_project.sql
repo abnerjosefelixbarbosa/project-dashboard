@@ -1,0 +1,12 @@
+CREATE TABLE tb_project (
+id VARCHAR(255) NOT NULL,
+name DATE NOT NULL,
+description VARCHAR(255) NOT NULL,
+date_start DATE NOT NULL,
+date_end DATE NOT NULL,
+budget DATE NOT NULL,
+account_id VARCHAR(255) NOT NULL,
+CONSTRAINT pk_account PRIMARY KEY (id)
+)
+
+ALTER TABLE tb_project ADD CONSTRAINT FK_TB_PROJECT_ON_TB_ACCOUNT FOREIGN KEY (account_id);
