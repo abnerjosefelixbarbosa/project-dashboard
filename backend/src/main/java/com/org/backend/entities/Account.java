@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.org.backend.dto.request.AccountRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,22 +25,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	@Column(nullable = false)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date date_creation = new Date();
+	private Date dateCreation = new Date();
 	@Column(nullable = false)
 	@Enumerated
 	private Level level = Level.BASIC;
 	@ManyToOne
-	@JoinColumn(
-		name = "user_id",
-		nullable = false
-	)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 	@OneToMany(mappedBy = "account")
 	private Collection<Project> projects;
+
+	public Account(AccountRequest accountRequest) {
+		User user = new User();
+		user.setDateBirth(accountRequest.dateBirthUser());
+		user.setEmail(accountRequest.emailUser());
+		user.setPassword(accountRequest.passwordUser());
+		user.setName(accountRequest.nameUser());
+		this.user = user;
+	}
 }

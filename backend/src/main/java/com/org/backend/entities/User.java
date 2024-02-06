@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,8 +38,7 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private String password;
 	@Column(nullable = false)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date date_birth;
+	private Date dateBirth;
 	@OneToMany(mappedBy = "user")
 	private Collection<Account> accounts;
 }

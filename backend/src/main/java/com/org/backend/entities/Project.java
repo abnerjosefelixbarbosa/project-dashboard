@@ -33,10 +33,10 @@ public class Project implements Serializable {
 	private String description;
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date date_start;
+	private Date dateStart;
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date date_end;
+	private Date dateEnd;
 	@Column(nullable = false)
 	private BigDecimal budget;
 	@ManyToOne
