@@ -20,8 +20,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.backend.dto.request.AccountRequest;
-import com.org.backend.entities.Account;
-import com.org.backend.entities.User;
 import com.org.backend.repositories.AccountRepository;
 import com.org.backend.repositories.UserRepository;
 
