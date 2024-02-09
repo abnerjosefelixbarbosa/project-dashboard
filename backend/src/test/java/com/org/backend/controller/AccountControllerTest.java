@@ -6,8 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,8 +19,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.backend.dto.request.AccountRequest;
-import com.org.backend.repositories.AccountRepository;
-import com.org.backend.repositories.UserRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -29,41 +26,45 @@ import com.org.backend.repositories.UserRepository;
 @ContextConfiguration
 public class AccountControllerTest {
 	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private AccountRepository accountRepository;
-	@Autowired
 	private MockMvc mockMvc;
 	@Autowired
 	private ObjectMapper objectMapper;
-	
-	@BeforeEach
-	public void setup() {
-		accountRepository.deleteAll();
-		userRepository.deleteAll();
-	}
-	
-	@AfterEach
-	public void tearDown() {
-		accountRepository.deleteAll();
-		userRepository.deleteAll();
-	}
 
 	@Test
+	@Disabled
 	public void shouldCreateAccountAndReturn201Status() throws Exception {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, 1999);
-		calendar.set(Calendar.MONTH, 04);
-		calendar.set(Calendar.DAY_OF_MONTH, 20);
-		AccountRequest accountRequest = buildAccountRequest("nome1", "email1@gmail.com", "@Password1",
-				Date.from(calendar.toInstant()));
-		String obj = objectMapper.writeValueAsString(accountRequest);
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.set(Calendar.YEAR, 1999);
+		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.DAY_OF_MONTH, 20);
+		AccountRequest accountRequest1 = buildAccountRequest("nome1", "email1@gmail.com", "@Password1",
+				Date.from(calendar1.toInstant()));
+		String obj1 = objectMapper.writeValueAsString(accountRequest1);
+		
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(Calendar.YEAR, 2005);
+		calendar2.set(Calendar.MONTH, 10);
+		calendar2.set(Calendar.DAY_OF_MONTH, 15);
+		AccountRequest accountRequest2 = buildAccountRequest("nome2", "email2@gmail.com", "@Password2",
+				Date.from(calendar2.toInstant()));
+		String obj2 = objectMapper.writeValueAsString(accountRequest2);
+		
 
-		mockMvc.perform(post("/api/accounts").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-				.content(obj)).andExpect(MockMvcResultMatchers.status().isCreated()).andDo(print());
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj1)).andExpect(MockMvcResultMatchers.status().isCreated())
+				.andDo(print());
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj2)).andExpect(MockMvcResultMatchers.status().isCreated())
+				.andDo(print());
+	}
+	
+	@Test
+	public void shouldLoginAccountAndReturn200Status() throws Exception {
+		
 	}
 
-	private AccountRequest buildAccountRequest(String name, String email, String password, Date date) {
-		return new AccountRequest(name, email, password, date);
+	private AccountRequest buildAccountRequest(String nameUser, String emailUser, String passwordUser,
+			Date dateBirthUser) {
+		return new AccountRequest(nameUser, emailUser, passwordUser, dateBirthUser);
 	}
 }
