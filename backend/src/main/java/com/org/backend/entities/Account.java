@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-import com.org.backend.dto.request.AccountRequest;
+import com.org.backend.dto.request.CreateAccountRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +40,7 @@ public class Account implements Serializable {
 	@OneToMany(mappedBy = "account")
 	private Collection<Project> projects;
 
-	public Account(AccountRequest accountRequest) {
+	public Account(CreateAccountRequest accountRequest) {
 		User user = new User();
 		user.setDateBirth(accountRequest.dateBirthUser());
 		user.setEmail(accountRequest.emailUser());

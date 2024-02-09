@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.org.backend.dto.request.AccountRequest;
-import com.org.backend.dto.response.AccountResponse;
+import com.org.backend.dto.request.CreateAccountRequest;
+import com.org.backend.dto.response.CreateAccountResponse;
 import com.org.backend.entities.Account;
 import com.org.backend.interfaces.IAccount;
 
@@ -25,8 +25,8 @@ public class AccountController {
 
 	@PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<AccountResponse> createAccount(@RequestBody @Valid AccountRequest accountRequest) {
-		Account accountResponse = iAccount.createAccount(new Account(accountRequest));
-		return ResponseEntity.status(201).body(new AccountResponse(accountResponse));
+	public ResponseEntity<CreateAccountResponse> createAccount(@RequestBody @Valid CreateAccountRequest request) {
+		Account response = iAccount.createAccount(new Account(request));
+		return ResponseEntity.status(201).body(new CreateAccountResponse(response));
 	}
 }

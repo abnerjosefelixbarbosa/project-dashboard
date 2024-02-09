@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 
-public record AccountRequest(
+public record CreateAccountRequest(
 		@Length(min = 1, max = 100, message = "name invalid") @NotNull(message = "name invalid") String nameUser,
 		@Email(message = "email invalid") @NotNull(message = "email invalid") String emailUser,
 		@Length(min = 1, max = 20, message = "password invalid") @NotNull(message = "password invalid") 
