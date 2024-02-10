@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.backend.dto.request.CreateAccountRequest;
+import com.org.backend.dto.request.LoginAccountRequest;
 import com.org.backend.repositories.AccountRepository;
 import com.org.backend.repositories.UserRepository;
 
@@ -52,27 +53,16 @@ public class AccountControllerTest {
 
 	@Test
 	public void shouldCreateAccountAndReturn201Status() throws Exception {
-		Calendar calendar1 = Calendar.getInstance();
-		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
-		calendar1.set(Calendar.DAY_OF_MONTH, 20);
-		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
-				Date.from(calendar1.toInstant()));
-		String obj1 = objectMapper.writeValueAsString(request1);
-
-		Calendar calendar2 = Calendar.getInstance();
-		calendar2.set(Calendar.YEAR, 2005);
-		calendar2.set(Calendar.MONTH, 10);
-		calendar2.set(Calendar.DAY_OF_MONTH, 15);
-		CreateAccountRequest request2 = new CreateAccountRequest("name2", "email2@gmail.com", "@Password2",
-				Date.from(calendar2.toInstant()));
-		String obj2 = objectMapper.writeValueAsString(request2);
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, 1999);
+		calendar.set(Calendar.MONTH, 04);
+		calendar.set(Calendar.DAY_OF_MONTH, 20);
+		CreateAccountRequest request = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
+				Date.from(calendar.toInstant()));
+		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj1)).andExpect(MockMvcResultMatchers.status().isCreated())
-				.andDo(print());
-		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj2)).andExpect(MockMvcResultMatchers.status().isCreated())
+				.accept(MediaType.APPLICATION_JSON).content(obj)).andExpect(MockMvcResultMatchers.status().isCreated())
 				.andDo(print());
 	}
 
@@ -250,11 +240,63 @@ public class AccountControllerTest {
 		calendar1.set(Calendar.DAY_OF_MONTH, currentDate.getDayOfMonth());
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1", Date.from(calendar1.toInstant()));
 		String obj1 = objectMapper.writeValueAsString(request1);
-		
-		System.out.println(obj1);
 
 		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj1))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+	}
+	
+	@Test
+	public void shouldCreateAccountWithEmailRepeatedFutureAndReturn400Status() throws Exception {
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.set(Calendar.YEAR, 1999);
+		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.DAY_OF_MONTH, 20);
+		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
+				Date.from(calendar1.toInstant()));
+		String obj1 = objectMapper.writeValueAsString(request1);
+
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(Calendar.YEAR, 2005);
+		calendar2.set(Calendar.MONTH, 10);
+		calendar2.set(Calendar.DAY_OF_MONTH, 15);
+		CreateAccountRequest request2 = new CreateAccountRequest("name2", "email1@gmail.com", "@Password2",
+				Date.from(calendar2.toInstant()));
+		String obj2 = objectMapper.writeValueAsString(request2);
+
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj1));
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj2))
+		        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+		        .andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("email exist"))
+				.andDo(print());
+	}
+	
+	@Test
+	public void shouldCreateAccountWithPasswordRepeatedFutureAndReturn400Status() throws Exception {
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.set(Calendar.YEAR, 1999);
+		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.DAY_OF_MONTH, 20);
+		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
+				Date.from(calendar1.toInstant()));
+		String obj1 = objectMapper.writeValueAsString(request1);
+
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(Calendar.YEAR, 2005);
+		calendar2.set(Calendar.MONTH, 10);
+		calendar2.set(Calendar.DAY_OF_MONTH, 15);
+		CreateAccountRequest request2 = new CreateAccountRequest("name2", "email2@gmail.com", "@Password1",
+				Date.from(calendar2.toInstant()));
+		String obj2 = objectMapper.writeValueAsString(request2);
+
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj1));
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj2))
+		        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+		        .andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("password exist"))
+				.andDo(print());
 	}
 }
