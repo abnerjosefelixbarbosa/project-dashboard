@@ -4,4 +4,5 @@ import com.org.backend.entities.Account;
 
 public interface IAccount {
 	Account createAccount(Account account);
+	Account loginAccount(Account account);
 }

@@ -30,17 +30,25 @@ public class ExcepitionController {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionDetails> handleException(Exception e, HttpServletRequest request) {
-		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
-				e.getMessage(), request.getRequestURI());
+		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), 400, e.getMessage(),
+				request.getRequestURI());
 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDetails);
+		return ResponseEntity.status(400).body(exceptionDetails);
 	}
-	
+
 	@ExceptionHandler(BusinessException.class)
 	public ResponseEntity<ExceptionDetails> handleBusinessException(BusinessException e, HttpServletRequest request) {
-		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
-				e.getMessage(), request.getRequestURI());
+		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), 400, e.getMessage(),
+				request.getRequestURI());
 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDetails);
+		return ResponseEntity.status(400).body(exceptionDetails);
+	}
+
+	@ExceptionHandler(NotFoundException.class)
+	public ResponseEntity<ExceptionDetails> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
+		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), 404, e.getMessage(),
+				request.getRequestURI());
+
+		return ResponseEntity.status(404).body(exceptionDetails);
 	}
 }

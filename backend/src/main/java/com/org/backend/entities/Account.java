@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import com.org.backend.dto.request.CreateAccountRequest;
+import com.org.backend.dto.request.LoginAccountRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,12 +41,19 @@ public class Account implements Serializable {
 	@OneToMany(mappedBy = "account")
 	private Collection<Project> projects;
 
-	public Account(CreateAccountRequest accountRequest) {
+	public Account(CreateAccountRequest request) {
 		User user = new User();
-		user.setDateBirth(accountRequest.dateBirthUser());
-		user.setEmail(accountRequest.emailUser());
-		user.setPassword(accountRequest.passwordUser());
-		user.setName(accountRequest.nameUser());
+		user.setDateBirth(request.dateBirthUser());
+		user.setEmail(request.emailUser());
+		user.setPassword(request.passwordUser());
+		user.setName(request.nameUser());
+		this.user = user;
+	}
+	
+	public Account(LoginAccountRequest request) {
+		User user = new User();
+		user.setEmail(request.emailUser());
+		user.setPassword(request.passwordUser());
 		this.user = user;
 	}
 }

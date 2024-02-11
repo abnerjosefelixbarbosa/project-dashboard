@@ -97,6 +97,22 @@ public class AccountControllerTest {
 	}
 
 	@Test
+	public void shouldCreateAccountWithNameLength101AndReturn400Status() throws Exception {
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.set(Calendar.YEAR, 1999);
+		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.DAY_OF_MONTH, 20);
+		CreateAccountRequest request1 = new CreateAccountRequest(
+				"name111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+				"email1@gmail.com", "@Password1", Date.from(calendar1.toInstant()));
+		String obj1 = objectMapper.writeValueAsString(request1);
+
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj1))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+	}
+
+	@Test
 	public void shouldCreateAccountWithEmailNullAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
@@ -172,7 +188,7 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	public void shouldCreateAccountWithPasswordLength1to20AndReturn400Status() throws Exception {
+	public void shouldCreateAccountWithPasswordLength20AndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
 		calendar1.set(Calendar.MONTH, 04);
@@ -215,7 +231,7 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj1))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldCreateAccountWithDateBirthPresentAndReturn400Status() throws Exception {
 		LocalDate currentDate = LocalDate.now();
@@ -223,31 +239,33 @@ public class AccountControllerTest {
 		calendar1.set(Calendar.YEAR, currentDate.getYear());
 		calendar1.set(Calendar.MONTH, currentDate.getMonthValue());
 		calendar1.set(Calendar.DAY_OF_MONTH, currentDate.getDayOfMonth());
-		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1", Date.from(calendar1.toInstant()));
+		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
+				Date.from(calendar1.toInstant()));
 		String obj1 = objectMapper.writeValueAsString(request1);
 
 		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj1))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldCreateAccountWithDateBirthFutureAndReturn400Status() throws Exception {
 		LocalDate currentDate = LocalDate.now();
 		Calendar calendar1 = Calendar.getInstance();
-		calendar1.set(Calendar.YEAR, currentDate.getYear() +1);
+		calendar1.set(Calendar.YEAR, currentDate.getYear() + 1);
 		calendar1.set(Calendar.MONTH, currentDate.getMonthValue());
 		calendar1.set(Calendar.DAY_OF_MONTH, currentDate.getDayOfMonth());
-		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1", Date.from(calendar1.toInstant()));
+		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
+				Date.from(calendar1.toInstant()));
 		String obj1 = objectMapper.writeValueAsString(request1);
 
 		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj1))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
-	public void shouldCreateAccountWithEmailRepeatedFutureAndReturn400Status() throws Exception {
+	public void shouldCreateAccountWithEmailExistingAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
 		calendar1.set(Calendar.MONTH, 04);
@@ -255,6 +273,9 @@ public class AccountControllerTest {
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
 				Date.from(calendar1.toInstant()));
 		String obj1 = objectMapper.writeValueAsString(request1);
+
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj1));
 
 		Calendar calendar2 = Calendar.getInstance();
 		calendar2.set(Calendar.YEAR, 2005);
@@ -265,16 +286,13 @@ public class AccountControllerTest {
 		String obj2 = objectMapper.writeValueAsString(request2);
 
 		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj1));
-		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj2))
-		        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-		        .andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("email exist"))
-				.andDo(print());
+				.andExpect(MockMvcResultMatchers.status().isBadRequest())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("email exist")).andDo(print());
 	}
-	
+
 	@Test
-	public void shouldCreateAccountWithPasswordRepeatedFutureAndReturn400Status() throws Exception {
+	public void shouldCreateAccountWithPasswordExistingAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
 		calendar1.set(Calendar.MONTH, 04);
@@ -282,6 +300,9 @@ public class AccountControllerTest {
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
 				Date.from(calendar1.toInstant()));
 		String obj1 = objectMapper.writeValueAsString(request1);
+
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj1));
 
 		Calendar calendar2 = Calendar.getInstance();
 		calendar2.set(Calendar.YEAR, 2005);
@@ -292,11 +313,111 @@ public class AccountControllerTest {
 		String obj2 = objectMapper.writeValueAsString(request2);
 
 		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj1));
-		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj2))
-		        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-		        .andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("password exist"))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("password exist")).andDo(print());
+	}
+
+	@Test
+	public void shouldLoginAccountWithEmailNullAndReturn400Status() throws Exception {
+		LoginAccountRequest request = new LoginAccountRequest(null, "@Password1");
+		String obj = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+	}
+
+	@Test
+	public void shouldLoginAccountWithEmaiLength0AndReturn400Status() throws Exception {
+		LoginAccountRequest request = new LoginAccountRequest("", "@Password1");
+		String obj = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+	}
+
+	@Test
+	public void shouldLoginAccountWithEmailInvalidAndReturn400Status() throws Exception {
+		LoginAccountRequest request = new LoginAccountRequest("email1gmail.com", "@Password1");
+		String obj = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+	}
+
+	@Test
+	public void shouldLoginAccountWithPasswordNullAndReturn400Status() throws Exception {
+		LoginAccountRequest request = new LoginAccountRequest("email1@gmail.com", null);
+		String obj = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+	}
+
+	@Test
+	public void shouldLoginAccountWithPasswordLength0AndReturn400Status() throws Exception {
+		LoginAccountRequest request = new LoginAccountRequest("email1@gmail.com", "");
+		String obj = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+	}
+
+	@Test
+	public void shouldLoginAccountWithPasswordLength21AndReturn400Status() throws Exception {
+		LoginAccountRequest request = new LoginAccountRequest("email1@gmail.com", "@Password111111111111");
+		String obj = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+	}
+
+	@Test
+	public void shouldLoginAccountWithPasswordNoPatternAndReturn400Status() throws Exception {
+		LoginAccountRequest request = new LoginAccountRequest("email1@gmail.com", "password1");
+		String obj = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
+	}
+
+	@Test
+	public void shouldLoginAccountWithEmailAndPasswordNotFindAndReturn404Status() throws Exception {
+		LoginAccountRequest request = new LoginAccountRequest("email1@gmail.com", "@Password1");
+		String obj = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj))
+				.andExpect(MockMvcResultMatchers.status().isNotFound())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("email and password not find"))
+				.andDo(print());
+	}
+
+	@Test
+	public void shouldLoginAccountAndReturn200Status() throws Exception {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, 1999);
+		calendar.set(Calendar.MONTH, 04);
+		calendar.set(Calendar.DAY_OF_MONTH, 20);
+		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
+				Date.from(calendar.toInstant()));
+		String obj1 = objectMapper.writeValueAsString(request1);
+
+		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj1));
+
+		LoginAccountRequest request2 = new LoginAccountRequest("email1@gmail.com", "@Password1");
+		String obj2 = objectMapper.writeValueAsString(request2);
+
+		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj2)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andDo(print());
 	}
 }

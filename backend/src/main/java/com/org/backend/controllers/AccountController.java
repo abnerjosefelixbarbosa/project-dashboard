@@ -4,16 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.org.backend.dto.request.CreateAccountRequest;
 import com.org.backend.dto.request.LoginAccountRequest;
+import com.org.backend.dto.request.UpdateAccountRequest;
 import com.org.backend.dto.response.CreateAccountResponse;
 import com.org.backend.dto.response.LoginAccountResponse;
+import com.org.backend.dto.response.UpdadeAccountResponse;
 import com.org.backend.entities.Account;
 import com.org.backend.interfaces.IAccount;
 
@@ -34,8 +38,15 @@ public class AccountController {
 	
 	@PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<LoginAccountResponse> createAccount(@RequestBody @Valid LoginAccountRequest request) {
-		//Account response = iAccount.createAccount(new Account(request));
-		return ResponseEntity.status(201).body(null);
+	public ResponseEntity<LoginAccountResponse> loginAccount(@RequestBody @Valid LoginAccountRequest request) {
+		Account response = iAccount.loginAccount(new Account(request));
+		return ResponseEntity.status(200).body(new LoginAccountResponse(response));
+	}
+	
+	@PatchMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<UpdadeAccountResponse> updateAccount(@RequestParam(required = false) String id,  @RequestBody @Valid UpdateAccountRequest request) {
+		//Account response = iAccount.loginAccount(new Account(request));
+		return ResponseEntity.status(200).body(null);
 	}
 }
