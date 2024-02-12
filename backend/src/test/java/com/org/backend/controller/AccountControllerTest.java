@@ -61,7 +61,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountAndReturn201Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, 1999);
-		calendar.set(Calendar.MONTH, 04);
+		calendar.set(Calendar.MONTH, 04 - 1);
 		calendar.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
 				Date.from(calendar.toInstant()));
@@ -76,7 +76,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithNameNullAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest(null, "email1@gmail.com", "@Password1",
 				Date.from(calendar1.toInstant()));
@@ -91,7 +91,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithNameLength0AndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest("", "email1@gmail.com", "@Password1",
 				Date.from(calendar1.toInstant()));
@@ -106,7 +106,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithNameLength101AndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest(
 				"name1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
@@ -122,7 +122,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithEmailNullAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", null, "@Password1",
 				Date.from(calendar1.toInstant()));
@@ -137,7 +137,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithEmailLength0AndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "", "@Password1",
 				Date.from(calendar1.toInstant()));
@@ -152,7 +152,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithEmailInvalidAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1gmail.com", "@Password1",
 				Date.from(calendar1.toInstant()));
@@ -167,7 +167,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithPasswordNullAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", null,
 				Date.from(calendar1.toInstant()));
@@ -182,7 +182,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithPasswordLength0AndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "",
 				Date.from(calendar1.toInstant()));
@@ -197,7 +197,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithPasswordLength21AndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password111111111111",
 				Date.from(calendar1.toInstant()));
@@ -212,7 +212,7 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithPasswordNoPatternAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "password1",
 				Date.from(calendar1.toInstant()));
@@ -225,10 +225,6 @@ public class AccountControllerTest {
 
 	@Test
 	public void shouldCreateAccountWithDateBirthNullAndReturn400Status() throws Exception {
-		Calendar calendar1 = Calendar.getInstance();
-		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
-		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1", null);
 		String obj1 = objectMapper.writeValueAsString(request1);
 
@@ -257,9 +253,9 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithDateBirthFutureAndReturn400Status() throws Exception {
 		LocalDate currentDate = LocalDate.now();
 		Calendar calendar1 = Calendar.getInstance();
-		calendar1.set(Calendar.YEAR, currentDate.getYear() + 1);
+		calendar1.set(Calendar.YEAR, currentDate.getYear());
 		calendar1.set(Calendar.MONTH, currentDate.getMonthValue());
-		calendar1.set(Calendar.DAY_OF_MONTH, currentDate.getDayOfMonth());
+		calendar1.set(Calendar.DAY_OF_MONTH, currentDate.getDayOfMonth() + 1);
 		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
 				Date.from(calendar1.toInstant()));
 		String obj1 = objectMapper.writeValueAsString(request1);
@@ -273,54 +269,58 @@ public class AccountControllerTest {
 	public void shouldCreateAccountWithEmailExistingAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
+		calendar1.set(Calendar.MONTH, 04 - 1);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
-		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
-				Date.from(calendar1.toInstant()));
-		String obj1 = objectMapper.writeValueAsString(request1);
-
-		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj1));
+		User user = new User();
+		user.setEmail("email1@gmail.com");
+		user.setDateBirth(Date.from(calendar1.toInstant()));
+		user.setName("name1");
+		user.setPassword("@Password1");
+		Account account = new Account();
+		account.setUser(user);
+		
+		userRepository.save(user);
+	    accountRepository.save(account);
 
 		Calendar calendar2 = Calendar.getInstance();
 		calendar2.set(Calendar.YEAR, 2005);
-		calendar2.set(Calendar.MONTH, 10);
+		calendar2.set(Calendar.MONTH, 10 - 1);
 		calendar2.set(Calendar.DAY_OF_MONTH, 15);
-		CreateAccountRequest request2 = new CreateAccountRequest("name2", "email1@gmail.com", "@Password2",
+		CreateAccountRequest request = new CreateAccountRequest("name2", "email1@gmail.com", "@Password2",
 				Date.from(calendar2.toInstant()));
-		String obj2 = objectMapper.writeValueAsString(request2);
+		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj2))
+				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("email exist")).andDo(print());
+				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("email user exist")).andDo(print());
 	}
 
 	@Test
 	public void shouldCreateAccountWithPasswordExistingAndReturn400Status() throws Exception {
-		Calendar calendar1 = Calendar.getInstance();
-		calendar1.set(Calendar.YEAR, 1999);
-		calendar1.set(Calendar.MONTH, 04);
-		calendar1.set(Calendar.DAY_OF_MONTH, 20);
-		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
-				Date.from(calendar1.toInstant()));
-		String obj1 = objectMapper.writeValueAsString(request1);
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, 1999);
+		calendar.set(Calendar.MONTH, 04 - 1);
+		calendar.set(Calendar.DAY_OF_MONTH, 20);
+		User user = new User();
+		user.setEmail("email1@gmail.com");
+		user.setDateBirth(Date.from(calendar.toInstant()));
+		user.setName("name1");
+		user.setPassword("@Password1");
+		Account account = new Account();
+		account.setUser(user);
+		
+		userRepository.save(user);
+	    accountRepository.save(account);
+
+		CreateAccountRequest request = new CreateAccountRequest("name2", "email2@gmail.com", "@Password1",
+				Date.from(calendar.toInstant()));
+		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj1));
-
-		Calendar calendar2 = Calendar.getInstance();
-		calendar2.set(Calendar.YEAR, 2005);
-		calendar2.set(Calendar.MONTH, 10);
-		calendar2.set(Calendar.DAY_OF_MONTH, 15);
-		CreateAccountRequest request2 = new CreateAccountRequest("name2", "email2@gmail.com", "@Password1",
-				Date.from(calendar2.toInstant()));
-		String obj2 = objectMapper.writeValueAsString(request2);
-
-		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj2))
+				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("password exist")).andDo(print());
+				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("password user exist")).andDo(print());
 	}
 
 	// test login account
@@ -402,7 +402,7 @@ public class AccountControllerTest {
 
 		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj)).andExpect(MockMvcResultMatchers.status().isNotFound())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("email and password not find"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("email user and password user not found"))
 				.andDo(print());
 	}
 
@@ -410,20 +410,24 @@ public class AccountControllerTest {
 	public void shouldLoginAccountAndReturn200Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, 1999);
-		calendar.set(Calendar.MONTH, 04);
+		calendar.set(Calendar.MONTH, 04 - 1);
 		calendar.set(Calendar.DAY_OF_MONTH, 20);
-		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
-				Date.from(calendar.toInstant()));
-		String obj1 = objectMapper.writeValueAsString(request1);
+		User user = new User();
+		user.setEmail("email1@gmail.com");
+		user.setDateBirth(Date.from(calendar.toInstant()));
+		user.setName("name1");
+		user.setPassword("@Password1");
+		Account account = new Account();
+		account.setUser(user);
+		
+		userRepository.save(user);
+	    accountRepository.save(account);
 
-		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj1));
-
-		LoginAccountRequest request2 = new LoginAccountRequest("email1@gmail.com", "@Password1");
-		String obj2 = objectMapper.writeValueAsString(request2);
+		LoginAccountRequest request = new LoginAccountRequest("email1@gmail.com", "@Password1");
+		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj2)).andExpect(MockMvcResultMatchers.status().isOk())
+				.accept(MediaType.APPLICATION_JSON).content(obj)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andDo(print());
 	}
 
