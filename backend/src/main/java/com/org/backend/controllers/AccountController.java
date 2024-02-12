@@ -35,18 +35,19 @@ public class AccountController {
 		Account response = iAccount.createAccount(new Account(request));
 		return ResponseEntity.status(201).body(new CreateAccountResponse(response));
 	}
-	
+
 	@PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<LoginAccountResponse> loginAccount(@RequestBody @Valid LoginAccountRequest request) {
 		Account response = iAccount.loginAccount(new Account(request));
 		return ResponseEntity.status(200).body(new LoginAccountResponse(response));
 	}
-	
+
 	@PatchMapping(path = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<UpdadeAccountResponse> updateAccount(@RequestParam(required = false) String id,  @RequestBody @Valid UpdateAccountRequest request) {
-		//Account response = iAccount.loginAccount(new Account(request));
-		return ResponseEntity.status(200).body(null);
+	public ResponseEntity<UpdadeAccountResponse> updateAccount(@RequestParam(required = false) String id,
+			@RequestBody @Valid UpdateAccountRequest request) {
+		Account response = iAccount.updateAccount(id, new Account(request));
+		return ResponseEntity.status(200).body(new UpdadeAccountResponse(response));
 	}
 }

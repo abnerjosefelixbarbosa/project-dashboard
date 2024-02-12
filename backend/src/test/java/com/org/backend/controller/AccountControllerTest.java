@@ -1,5 +1,6 @@
 package com.org.backend.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -22,6 +23,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.backend.dtos.requests.CreateAccountRequest;
 import com.org.backend.dtos.requests.LoginAccountRequest;
+import com.org.backend.dtos.requests.UpdateAccountRequest;
+import com.org.backend.entities.Account;
+import com.org.backend.entities.User;
 import com.org.backend.repositories.AccountRepository;
 import com.org.backend.repositories.UserRepository;
 
@@ -50,8 +54,8 @@ public class AccountControllerTest {
 		accountRepository.deleteAll();
 		userRepository.deleteAll();
 	}
-	
-	//test create account
+
+	// test create account
 
 	@Test
 	public void shouldCreateAccountAndReturn201Status() throws Exception {
@@ -422,6 +426,38 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj2)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andDo(print());
 	}
-	
-	
+
+	// test update account
+
+	@Test
+	public void shouldUpdateAccountAndReturn200Status() throws Exception {
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.set(Calendar.YEAR, 1999);
+		calendar1.set(Calendar.MONTH, 04 - 1);
+		calendar1.set(Calendar.DAY_OF_MONTH, 20);
+		User user = new User();
+		user.setEmail("email1@gmail.com");
+		user.setDateBirth(Date.from(calendar1.toInstant()));
+		user.setName("name1");
+		user.setPassword("@Password1");
+		Account account = new Account();
+		account.setUser(user);
+
+		userRepository.save(user);
+		account = accountRepository.save(account);
+
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.set(Calendar.YEAR, 2000);
+		calendar2.set(Calendar.MONTH, 12 - 1);
+		calendar2.set(Calendar.DAY_OF_MONTH, 20);
+		UpdateAccountRequest request = new UpdateAccountRequest("FULL", "name2", "email2@gmail.com", "@Password2",
+				Date.from(calendar2.toInstant()));
+		String obj = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(patch("/api/accounts/update?id=" + account.getId()).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(obj))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(account.getId()))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.idUser").value(account.getUser().getId()))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andDo(print());
+	}
 }

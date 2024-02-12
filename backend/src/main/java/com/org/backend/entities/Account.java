@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.org.backend.dtos.requests.CreateAccountRequest;
 import com.org.backend.dtos.requests.LoginAccountRequest;
+import com.org.backend.dtos.requests.UpdateAccountRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +35,7 @@ public class Account implements Serializable {
 	private Date dateCreation = new Date();
 	@Column(nullable = false)
 	@Enumerated
-	private Level level = Level.BASIC;
+	private Level level = Level.valueOf("BASIC");
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
@@ -54,6 +55,16 @@ public class Account implements Serializable {
 		User user = new User();
 		user.setEmail(request.emailUser());
 		user.setPassword(request.passwordUser());
+		this.user = user;
+	}
+	
+	public Account(UpdateAccountRequest request) {
+		this.level = Level.valueOf(request.level());
+		User user = new User();
+		user.setDateBirth(request.dateBirthUser());
+		user.setEmail(request.emailUser());
+		user.setPassword(request.passwordUser());
+		user.setName(request.nameUser());
 		this.user = user;
 	}
 }

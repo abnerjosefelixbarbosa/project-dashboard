@@ -31,16 +31,48 @@ public class AccountService implements IAccount {
 		return accountRepository
 				.findByUserEmailAndUserPassword(account.getUser().getEmail(), account.getUser().getPassword())
 				.orElseThrow(() -> {
-					throw new NotFoundException("email and password not find");
+					throw new NotFoundException("email user and password user not found");
 				});
+	}
+	
+	public Account updateAccount(String id, Account account) {
+		validateId(id);
+		validateUpdateAccount(account.getUser());
+		Account findById = accountRepository.findById(id).orElseThrow(() -> {
+			throw new NotFoundException("id not found");
+		});
+		
+		findById.setLevel(account.getLevel());
+		findById.getUser().setDateBirth(account.getUser().getDateBirth());
+		findById.getUser().setEmail(account.getUser().getEmail());
+		findById.getUser().setName(account.getUser().getName());
+		findById.getUser().setPassword(account.getUser().getPassword());
+		
+		iUser.save(findById.getUser());
+		return accountRepository.save(findById);
+	}
+	
+	private void validateId(String id) {
+		if (id == null) {
+			throw new BusinessException("id invalid");
+		}
 	}
 
 	private void validateCreateAccount(User user) {
 		if (accountRepository.existsByUserEmail(user.getEmail())) {
-			throw new BusinessException("email exist");
+			throw new BusinessException("email user exist");
 		}
 		if (accountRepository.existsByUserPassword(user.getPassword())) {
-			throw new BusinessException("password exist");
+			throw new BusinessException("password user exist");
+		}
+	}
+	
+	private void validateUpdateAccount(User user) {
+		if (accountRepository.existsByUserEmail(user.getEmail())) {
+			throw new BusinessException("email user exist");
+		}
+		if (accountRepository.existsByUserPassword(user.getPassword())) {
+			throw new BusinessException("password user exist");
 		}
 	}
 }
