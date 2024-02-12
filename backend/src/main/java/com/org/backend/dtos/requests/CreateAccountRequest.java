@@ -1,4 +1,4 @@
-package com.org.backend.dto.request;
+package com.org.backend.dtos.requests;
 
 import java.util.Date;
 

@@ -20,8 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.org.backend.dto.request.CreateAccountRequest;
-import com.org.backend.dto.request.LoginAccountRequest;
+import com.org.backend.dtos.requests.CreateAccountRequest;
+import com.org.backend.dtos.requests.LoginAccountRequest;
 import com.org.backend.repositories.AccountRepository;
 import com.org.backend.repositories.UserRepository;
 
@@ -50,6 +50,8 @@ public class AccountControllerTest {
 		accountRepository.deleteAll();
 		userRepository.deleteAll();
 	}
+	
+	//test create account
 
 	@Test
 	public void shouldCreateAccountAndReturn201Status() throws Exception {
@@ -103,7 +105,7 @@ public class AccountControllerTest {
 		calendar1.set(Calendar.MONTH, 04);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
 		CreateAccountRequest request1 = new CreateAccountRequest(
-				"name111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+				"name1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
 				"email1@gmail.com", "@Password1", Date.from(calendar1.toInstant()));
 		String obj1 = objectMapper.writeValueAsString(request1);
 
@@ -188,13 +190,12 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	public void shouldCreateAccountWithPasswordLength20AndReturn400Status() throws Exception {
+	public void shouldCreateAccountWithPasswordLength21AndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.set(Calendar.YEAR, 1999);
 		calendar1.set(Calendar.MONTH, 04);
 		calendar1.set(Calendar.DAY_OF_MONTH, 20);
-		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com",
-				"@Password1111111111111111111111111111111111111111111111111111111111111111",
+		CreateAccountRequest request1 = new CreateAccountRequest("name1", "email1@gmail.com", "@Password111111111111",
 				Date.from(calendar1.toInstant()));
 		String obj1 = objectMapper.writeValueAsString(request1);
 
@@ -318,6 +319,8 @@ public class AccountControllerTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("password exist")).andDo(print());
 	}
 
+	// test login account
+
 	@Test
 	public void shouldLoginAccountWithEmailNullAndReturn400Status() throws Exception {
 		LoginAccountRequest request = new LoginAccountRequest(null, "@Password1");
@@ -394,8 +397,7 @@ public class AccountControllerTest {
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj))
-				.andExpect(MockMvcResultMatchers.status().isNotFound())
+				.accept(MediaType.APPLICATION_JSON).content(obj)).andExpect(MockMvcResultMatchers.status().isNotFound())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.exception").value("email and password not find"))
 				.andDo(print());
 	}
@@ -420,4 +422,6 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj2)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andDo(print());
 	}
+	
+	
 }

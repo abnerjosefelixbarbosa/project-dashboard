@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.org.backend.dto.request.CreateAccountRequest;
-import com.org.backend.dto.request.LoginAccountRequest;
-import com.org.backend.dto.request.UpdateAccountRequest;
-import com.org.backend.dto.response.CreateAccountResponse;
-import com.org.backend.dto.response.LoginAccountResponse;
-import com.org.backend.dto.response.UpdadeAccountResponse;
+import com.org.backend.dtos.requests.CreateAccountRequest;
+import com.org.backend.dtos.requests.LoginAccountRequest;
+import com.org.backend.dtos.requests.UpdateAccountRequest;
+import com.org.backend.dtos.responses.CreateAccountResponse;
+import com.org.backend.dtos.responses.LoginAccountResponse;
+import com.org.backend.dtos.responses.UpdadeAccountResponse;
 import com.org.backend.entities.Account;
 import com.org.backend.interfaces.IAccount;
 

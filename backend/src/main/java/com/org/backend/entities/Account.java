@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-import com.org.backend.dto.request.CreateAccountRequest;
-import com.org.backend.dto.request.LoginAccountRequest;
+import com.org.backend.dtos.requests.CreateAccountRequest;
+import com.org.backend.dtos.requests.LoginAccountRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

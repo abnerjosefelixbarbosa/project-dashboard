@@ -1,4 +1,4 @@
-package com.org.backend.dto.response;
+package com.org.backend.dtos.responses;
 
 public record UpdadeAccountResponse() {
 
