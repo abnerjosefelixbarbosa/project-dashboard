@@ -7,6 +7,7 @@ import com.org.backend.entities.Account;
 import com.org.backend.entities.User;
 import com.org.backend.exception.BusinessException;
 import com.org.backend.exception.NotFoundException;
+import com.org.backend.exception.ValidationParamException;
 import com.org.backend.interfaces.IAccount;
 import com.org.backend.interfaces.IUser;
 import com.org.backend.repositories.AccountRepository;
@@ -36,7 +37,7 @@ public class AccountService implements IAccount {
 	}
 	
 	public Account updateAccount(String id, Account account) {
-		validateId(id);
+		validateParamId(id);
 		validateUpdateAccount(account.getUser());
 		Account findById = accountRepository.findById(id).orElseThrow(() -> {
 			throw new NotFoundException("id not found");
@@ -52,9 +53,9 @@ public class AccountService implements IAccount {
 		return accountRepository.save(findById);
 	}
 	
-	private void validateId(String id) {
+	private void validateParamId(String id) {
 		if (id == null) {
-			throw new BusinessException("id invalid");
+			throw new ValidationParamException("id invalid");
 		}
 	}
 

@@ -18,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_account")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -35,7 +37,7 @@ public class Account implements Serializable {
 	private Date dateCreation = new Date();
 	@Column(nullable = false)
 	@Enumerated
-	private Level level = Level.valueOf("BASIC");
+	private Level level = Level.BASIC;
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
@@ -59,7 +61,7 @@ public class Account implements Serializable {
 	}
 	
 	public Account(UpdateAccountRequest request) {
-		this.level = Level.valueOf(request.level());
+		this.level = request.level();
 		User user = new User();
 		user.setDateBirth(request.dateBirthUser());
 		user.setEmail(request.emailUser());

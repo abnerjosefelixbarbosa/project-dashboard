@@ -28,8 +28,8 @@ public class ExcepitionController {
 		return errors;
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ExceptionDetails> handleException(Exception e, HttpServletRequest request) {
+	@ExceptionHandler(ValidationParamException.class)
+	public ResponseEntity<ExceptionDetails> handleValidationParamException(Exception e, HttpServletRequest request) {
 		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), 400, e.getMessage(),
 				request.getRequestURI());
 
