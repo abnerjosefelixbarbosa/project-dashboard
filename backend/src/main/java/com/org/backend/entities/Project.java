@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.org.backend.dtos.requests.CreateProjectRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +27,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
@@ -42,9 +44,17 @@ public class Project implements Serializable {
 	@Column(nullable = false)
 	private BigDecimal budget;
 	@ManyToOne
-	@JoinColumn(
-		name = "account_id",
-		nullable = false
-	)
+	@JoinColumn(name = "account_id", nullable = false)
 	private Account account;
+	
+	public Project(CreateProjectRequest request) {
+		Account account = new Account();
+		account.setId(request.accountId());
+		this.name = request.name();
+		this.description = request.description();
+		this.dateStart = request.dateStart();
+		this.dateEnd = request.dateEnd();
+		this.budget = request.budget();
+		this.account = account;
+	}
 }

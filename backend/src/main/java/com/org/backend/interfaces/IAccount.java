@@ -6,4 +6,5 @@ public interface IAccount {
 	Account createAccount(Account account);
 	Account loginAccount(Account account);
 	Account updateAccount(String id, Account account);
+	Account findAccountById(String id);
 }

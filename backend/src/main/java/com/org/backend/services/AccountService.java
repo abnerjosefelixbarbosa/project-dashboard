@@ -39,9 +39,7 @@ public class AccountService implements IAccount {
 	public Account updateAccount(String id, Account account) {
 		validateParamId(id);
 		validateUpdateAccount(account.getUser());
-		Account findById = accountRepository.findById(id).orElseThrow(() -> {
-			throw new NotFoundException("id not found");
-		});
+		Account findById = findAccountById(id);
 		
 		findById.setLevel(account.getLevel());
 		findById.getUser().setDateBirth(account.getUser().getDateBirth());
@@ -51,6 +49,12 @@ public class AccountService implements IAccount {
 		
 		iUser.save(findById.getUser());
 		return accountRepository.save(findById);
+	}
+	
+	public Account findAccountById(String id) {
+		return accountRepository.findById(id).orElseThrow(() -> {
+			throw new NotFoundException("account id not found");
+		});
 	}
 	
 	private void validateParamId(String id) {
