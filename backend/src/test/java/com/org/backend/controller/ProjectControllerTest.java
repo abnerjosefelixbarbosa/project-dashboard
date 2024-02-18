@@ -84,8 +84,10 @@ public class ProjectControllerTest {
 		calendarEnd.set(Calendar.YEAR, localDate.getYear() + 10);
 		calendarEnd.set(Calendar.MONTH, localDate.getMonthValue());
 		calendarEnd.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth() + 10);
-		CreateProjectRequest request = new CreateProjectRequest("name1", "description1",
-				Date.from(calendarStart.toInstant()), Date.from(calendarEnd.toInstant()), BigDecimal.valueOf(0.01), account.getId());
+		String name = "name111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+		String description = "description111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+		CreateProjectRequest request = new CreateProjectRequest(name, description, Date.from(calendarStart.toInstant()),
+				Date.from(calendarEnd.toInstant()), BigDecimal.valueOf(0.01), account.getId());
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/projects/create").contentType(MediaType.APPLICATION_JSON)

@@ -64,7 +64,9 @@ public class AccountControllerTest {
 		calendar.set(Calendar.YEAR, 1999);
 		calendar.set(Calendar.MONTH, 04 - 1);
 		calendar.set(Calendar.DAY_OF_MONTH, 20);
-		CreateAccountRequest request = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
+		String name = "name111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+		String password = "@Password11111111111";
+		CreateAccountRequest request = new CreateAccountRequest(name, "email1@gmail.com", password,
 				Date.from(calendar.toInstant()));
 		String obj = objectMapper.writeValueAsString(request);
 
@@ -405,13 +407,14 @@ public class AccountControllerTest {
 		calendar.set(Calendar.YEAR, 1999);
 		calendar.set(Calendar.MONTH, 04 - 1);
 		calendar.set(Calendar.DAY_OF_MONTH, 20);
-		User user = new User(null, "name1", "email1@gmail.com", "@Password1", Date.from(calendar.toInstant()), null);
+		User user = new User(null, "name1", "email1@gmail.com", "@Password11111111111", Date.from(calendar.toInstant()), null);
 		Account account = new Account(null, new Date(), Level.BASIC, user, null);
 
 		userRepository.save(user);
 		accountRepository.save(account);
 
-		LoginAccountRequest request = new LoginAccountRequest("email1@gmail.com", "@Password1");
+		String password = "@Password11111111111";
+		LoginAccountRequest request = new LoginAccountRequest("email1@gmail.com", password);
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/accounts/login").contentType(MediaType.APPLICATION_JSON)
@@ -568,7 +571,7 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithEmailLength0AndReturn400Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
@@ -589,7 +592,7 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithEmailInvalidAndReturn400Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
@@ -610,7 +613,7 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithEmailExistAndReturn400Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
@@ -631,7 +634,7 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithPasswordExistAndReturn400Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
@@ -652,7 +655,7 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithPasswordNullAndReturn400Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
@@ -673,7 +676,7 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithPasswordNoPatternAndReturn400Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
@@ -694,7 +697,7 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithPasswordLength0AndReturn400Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
@@ -715,7 +718,7 @@ public class AccountControllerTest {
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithPasswordLength21AndReturn400Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
@@ -728,15 +731,15 @@ public class AccountControllerTest {
 		userRepository.save(user);
 		accountRepository.save(account);
 
-		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com", "@Password111111111111",
-				Date.from(calendar.toInstant()));
+		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com",
+				"@Password111111111111", Date.from(calendar.toInstant()));
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(patch("/api/accounts/update?id=" + account.getId()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithDateBirthNullAndReturn400Status() throws Exception {
 		Calendar calendar = Calendar.getInstance();
@@ -749,14 +752,15 @@ public class AccountControllerTest {
 		userRepository.save(user);
 		accountRepository.save(account);
 
-		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com", "@Password1", null);
+		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com", "@Password1",
+				null);
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(patch("/api/accounts/update?id=" + account.getId()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithDateBirthPresetAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
@@ -774,14 +778,15 @@ public class AccountControllerTest {
 		calendar2.set(Calendar.YEAR, localDate.getYear());
 		calendar2.set(Calendar.MONTH, localDate.getMonthValue());
 		calendar2.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com", "@Password1", Date.from(calendar2.toInstant()));
+		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com", "@Password1",
+				Date.from(calendar2.toInstant()));
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(patch("/api/accounts/update?id=" + account.getId()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountWithDateBirthFutureAndReturn400Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
@@ -799,14 +804,15 @@ public class AccountControllerTest {
 		calendar2.set(Calendar.YEAR, localDate.getYear());
 		calendar2.set(Calendar.MONTH, localDate.getMonthValue());
 		calendar2.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth() + 1);
-		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com", "@Password1", Date.from(calendar2.toInstant()));
+		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com", "@Password1",
+				Date.from(calendar2.toInstant()));
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(patch("/api/accounts/update?id=" + account.getId()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andDo(print());
 	}
-	
+
 	@Test
 	public void shouldUpdateAccountAndReturn200Status() throws Exception {
 		Calendar calendar1 = Calendar.getInstance();
@@ -824,13 +830,15 @@ public class AccountControllerTest {
 		calendar2.set(Calendar.YEAR, localDate.getYear() - 10);
 		calendar2.set(Calendar.MONTH, localDate.getMonthValue());
 		calendar2.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com", "@Password2", Date.from(calendar2.toInstant()));
+		String name = "name111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+		String password = "@Password11111111111";
+		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, name, "email2@gmail.com", password,
+				Date.from(calendar2.toInstant()));
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(patch("/api/accounts/update?id=" + account.getId()).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(obj))
-				.andExpect(MockMvcResultMatchers.status().isOk()).andDo(print());
+				.accept(MediaType.APPLICATION_JSON).content(obj)).andExpect(MockMvcResultMatchers.status().isOk())
+				.andDo(print());
 	}
-	
-	
+
 }
