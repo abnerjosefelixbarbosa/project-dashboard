@@ -69,4 +69,12 @@ public class Account implements Serializable {
 		user.setName(request.nameUser());
 		this.user = user;
 	}
+	
+	public void update(Account account) {
+		this.level = account.getLevel();
+		this.user.setDateBirth(account.getUser().getDateBirth());
+		this.user.setEmail(account.getUser().getEmail());
+		this.user.setName(account.getUser().getName());
+		this.user.setPassword(account.getUser().getPassword());
+	}
 }

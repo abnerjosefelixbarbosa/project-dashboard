@@ -39,16 +39,12 @@ public class AccountService implements IAccount {
 	public Account updateAccount(String id, Account account) {
 		validateParamId(id);
 		validateUpdateAccount(account.getUser());
-		Account findById = findAccountById(id);
+		Account findAccountById = findAccountById(id);
 		
-		findById.setLevel(account.getLevel());
-		findById.getUser().setDateBirth(account.getUser().getDateBirth());
-		findById.getUser().setEmail(account.getUser().getEmail());
-		findById.getUser().setName(account.getUser().getName());
-		findById.getUser().setPassword(account.getUser().getPassword());
+		findAccountById.update(account);
 		
-		iUser.save(findById.getUser());
-		return accountRepository.save(findById);
+		iUser.save(findAccountById.getUser());
+		return accountRepository.save(findAccountById);
 	}
 	
 	public Account findAccountById(String id) {

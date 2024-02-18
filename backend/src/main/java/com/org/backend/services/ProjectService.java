@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.org.backend.entities.Account;
 import com.org.backend.entities.Project;
 import com.org.backend.exception.BusinessException;
+import com.org.backend.exception.NotFoundException;
 import com.org.backend.interfaces.IAccount;
 import com.org.backend.interfaces.IProject;
 import com.org.backend.repositories.ProjectRepository;
@@ -21,13 +22,27 @@ public class ProjectService implements IProject {
 	
 	@Transactional
 	public Project createProject(Project project) {
-		Account account = iAccount.findAccountById(project.getAccount().getId());
-		project.setAccount(account);
-		validateCreateProject(project);
+		Account accountFound = iAccount.findAccountById(project.getAccount().getId());
+		project.setAccount(accountFound);
+		validateProject(project);
 		return projectRepository.save(project);
 	}
 	
-	private void validateCreateProject(Project project) {
+	@Transactional
+	public Project updateProjectByid(String id, Project project) {
+		validateProject(project);
+		Project projectFound = findProjectById(id);
+		projectFound.updateProjectByid(project);
+		return projectRepository.save(projectFound);
+	}
+	
+	public Project findProjectById(String id) {
+		return projectRepository.findById(id).orElseThrow(() -> {
+			throw new NotFoundException("project id not found");
+		});
+	}
+	
+	private void validateProject(Project project) {
 		if (project.getDateEnd().before(project.getDateStart())) {
 			throw new BusinessException("date end invalid");
 		}

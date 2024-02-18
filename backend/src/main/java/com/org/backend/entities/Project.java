@@ -7,6 +7,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.org.backend.dtos.requests.CreateProjectRequest;
+import com.org.backend.dtos.requests.UpdateProjectRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,5 +57,23 @@ public class Project implements Serializable {
 		this.dateEnd = request.dateEnd();
 		this.budget = request.budget();
 		this.account = account;
+	}
+	
+	public Project(UpdateProjectRequest request) {
+		Account account = new Account();
+		this.name = request.name();
+		this.description = request.description();
+		this.dateStart = request.dateStart();
+		this.dateEnd = request.dateEnd();
+		this.budget = request.budget();
+		this.account = account;
+	}
+	
+	public void updateProjectByid(Project project) {
+		this.name = project.getName();
+		this.description = project.getDescription();
+		this.dateStart = project.getDateStart();
+		this.dateEnd = project.getDateEnd();
+		this.budget = project.getBudget();
 	}
 }
