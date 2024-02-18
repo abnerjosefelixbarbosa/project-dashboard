@@ -12,7 +12,6 @@ import java.util.Date;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -64,7 +63,6 @@ public class ProjectControllerTest {
 	}
 
 	@Test
-	@Disabled
 	public void shouldCreateProjectAndReturn201Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
 		Calendar calendarBirth = Calendar.getInstance();
@@ -102,7 +100,6 @@ public class ProjectControllerTest {
 	}
 	
 	@Test
-	@Disabled
 	public void shouldUpdateProjectByIdAndReturn200Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
 		Calendar calendarBirth = Calendar.getInstance();
@@ -165,7 +162,6 @@ public class ProjectControllerTest {
 	}
 	
 	@Test
-	@Disabled
 	public void shouldDeleteProjectByIdAndReturn204Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
 		Calendar calendarBirth = Calendar.getInstance();
