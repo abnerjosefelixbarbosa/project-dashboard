@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.org.backend.dtos.requests.CreateProjectRequest;
 import com.org.backend.dtos.requests.UpdateProjectRequest;
 import com.org.backend.dtos.responses.CreateProjectResponse;
+import com.org.backend.dtos.responses.DeleteProjectResponse;
 import com.org.backend.dtos.responses.UpdateProjectResponse;
 import com.org.backend.entities.Project;
 import com.org.backend.exception.ValidationParamException;
@@ -42,7 +44,17 @@ public class ProjectController {
 		if (id == null) {
 			throw new ValidationParamException("id invalid");
 		}
-		Project response = iProject.updateProjectByid(id, new Project(request));
+		Project response = iProject.updateProjectById(id, new Project(request));
 		return ResponseEntity.status(200).body(new UpdateProjectResponse(response));
+	}
+	
+	@DeleteMapping(path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public ResponseEntity<DeleteProjectResponse> deleteProjectById(@RequestParam(required = false) String id) {
+		if (id == null) {
+			throw new ValidationParamException("id invalid");
+		}
+		iProject.deleteProjectById(id);
+		return ResponseEntity.status(204).body(null);
 	}
 }

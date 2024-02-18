@@ -29,11 +29,16 @@ public class ProjectService implements IProject {
 	}
 	
 	@Transactional
-	public Project updateProjectByid(String id, Project project) {
+	public Project updateProjectById(String id, Project project) {
 		validateProject(project);
 		Project projectFound = findProjectById(id);
 		projectFound.updateProjectByid(project);
 		return projectRepository.save(projectFound);
+	}
+	
+	public void deleteProjectById(String id) {
+	    findProjectById(id);
+		projectRepository.deleteById(id);
 	}
 	
 	public Project findProjectById(String id) {

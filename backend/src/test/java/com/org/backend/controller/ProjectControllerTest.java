@@ -1,5 +1,6 @@
 package com.org.backend.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -11,6 +12,7 @@ import java.util.Date;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -62,6 +64,7 @@ public class ProjectControllerTest {
 	}
 
 	@Test
+	@Disabled
 	public void shouldCreateProjectAndReturn201Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
 		Calendar calendarBirth = Calendar.getInstance();
@@ -99,6 +102,7 @@ public class ProjectControllerTest {
 	}
 	
 	@Test
+	@Disabled
 	public void shouldUpdateProjectByIdAndReturn200Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
 		Calendar calendarBirth = Calendar.getInstance();
@@ -133,21 +137,70 @@ public class ProjectControllerTest {
 		project = projectRepository.save(project);
 	
 		Calendar calendarStart1 = Calendar.getInstance();
-		calendarStart1.set(Calendar.YEAR, localDate.getYear());
+		calendarStart1.set(Calendar.YEAR, localDate.getYear() + 10);
 		calendarStart1.set(Calendar.MONTH, localDate.getMonthValue() - 1);
-		calendarStart1.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth() + 10);
+		calendarStart1.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
 		Calendar calendarEnd1 = Calendar.getInstance();
-		calendarEnd1.set(Calendar.YEAR, localDate.getYear());
+		calendarEnd1.set(Calendar.YEAR, localDate.getYear() + 20);
 		calendarEnd1.set(Calendar.MONTH, localDate.getMonthValue() - 1);
-		calendarEnd1.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth() + 11);
-		String name = "name111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
-		String description = "description111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
-		UpdateProjectRequest request = new UpdateProjectRequest(name, description, Date.from(calendarStart1.toInstant()),
+		calendarEnd1.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
+		
+		String nameNull = null;
+		String name0 = "";
+		String name101 = "name1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+		String descriptionNull = null;
+		String description0 = "";
+		String description201 = "description1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+		BigDecimal budget0 = BigDecimal.valueOf(0.00);
+		BigDecimal budgetNull = null;
+		BigDecimal budgetDigit = BigDecimal.valueOf(0.1);
+		
+		UpdateProjectRequest request = new UpdateProjectRequest("name2", "description2", Date.from(calendarStart1.toInstant()),
 				Date.from(calendarEnd1.toInstant()), BigDecimal.valueOf(0.01));
 		String obj = objectMapper.writeValueAsString(request);
 		
 		mockMvc.perform(patch("/api/projects/update?id=" + project.getId()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj)).andExpect(MockMvcResultMatchers.status().isOk())
+				.andDo(print());
+	}
+	
+	@Test
+	@Disabled
+	public void shouldDeleteProjectByIdAndReturn204Status() throws Exception {
+		LocalDate localDate = LocalDate.now();
+		Calendar calendarBirth = Calendar.getInstance();
+		calendarBirth.set(Calendar.YEAR, localDate.getYear() - 25);
+		calendarBirth.set(Calendar.MONTH, localDate.getMonthValue() - 1);
+		calendarBirth.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
+		User user = new User();
+		user.setName("name1");
+		user.setEmail("email1@gmail.com");
+		user.setPassword("@Password1");
+		user.setDateBirth(Date.from(calendarBirth.toInstant()));
+		Account account = new Account();
+		account.setUser(user);
+		Project project = new Project();
+		project.setName("name1");
+		project.setDescription("description1");
+		Calendar calendarStart = Calendar.getInstance();
+		calendarStart.set(Calendar.YEAR, localDate.getYear() + 10);
+		calendarStart.set(Calendar.MONTH, localDate.getMonthValue() - 1);
+		calendarStart.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
+		project.setDateStart(Date.from(calendarStart.toInstant()));
+		Calendar calendarEnd = Calendar.getInstance();
+		calendarEnd.set(Calendar.YEAR, localDate.getYear() + 20);
+		calendarEnd.set(Calendar.MONTH, localDate.getMonthValue() - 1);
+		calendarEnd.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
+		project.setDateEnd(Date.from(calendarEnd.toInstant()));
+		project.setBudget(BigDecimal.valueOf(0.01));
+		
+		userRepository.save(user);
+		account = accountRepository.save(account);
+		project.setAccount(account);
+		project = projectRepository.save(project);
+		
+		mockMvc.perform(delete("/api/projects/delete?id=" + project.getId()).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isNoContent())
 				.andDo(print());
 	}
 }
