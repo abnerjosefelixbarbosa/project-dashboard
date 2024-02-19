@@ -34,10 +34,10 @@ public class Account implements Serializable {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	@Column(nullable = false)
-	private Date dateCreation = new Date();
+	private Date dateCreation;
 	@Column(nullable = false)
 	@Enumerated
-	private Level level = Level.BASIC;
+	private Level level;
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;

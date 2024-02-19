@@ -1,5 +1,7 @@
 package com.org.backend.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,10 @@ public class ProjectService implements IProject {
 		return projectRepository.findById(id).orElseThrow(() -> {
 			throw new NotFoundException("project id not found");
 		});
+	}
+	
+	public List<Project> findAllProjectByAccountId(String accountId) {
+		return projectRepository.findAllByAccountId(accountId);
 	}
 	
 	private void validateProject(Project project) {
