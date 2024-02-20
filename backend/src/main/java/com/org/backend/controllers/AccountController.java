@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.org.backend.dtos.requests.CreateAccountRequest;
 import com.org.backend.dtos.requests.LoginAccountRequest;
 import com.org.backend.dtos.requests.UpdateAccountRequest;
-import com.org.backend.dtos.responses.CreateAccountResponse;
-import com.org.backend.dtos.responses.LoginAccountResponse;
-import com.org.backend.dtos.responses.UpdadeAccountResponse;
+import com.org.backend.dtos.responses.AccountResponse;
 import com.org.backend.entities.Account;
 import com.org.backend.exception.ValidationParamException;
 import com.org.backend.interfaces.IAccount;
@@ -31,26 +29,26 @@ public class AccountController {
 
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<CreateAccountResponse> createAccount(@RequestBody @Valid CreateAccountRequest request) {
+	public ResponseEntity<AccountResponse> createAccount(@RequestBody @Valid CreateAccountRequest request) {
 		Account response = iAccount.createAccount(new Account(request));
-		return ResponseEntity.status(201).body(new CreateAccountResponse(response));
+		return ResponseEntity.status(201).body(new AccountResponse(response));
 	}
 
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<LoginAccountResponse> loginAccount(@RequestBody @Valid LoginAccountRequest request) {
+	public ResponseEntity<AccountResponse> loginAccount(@RequestBody @Valid LoginAccountRequest request) {
 		Account response = iAccount.loginAccount(new Account(request));
-		return ResponseEntity.status(200).body(new LoginAccountResponse(response));
+		return ResponseEntity.status(200).body(new AccountResponse(response));
 	}
 
 	@PatchMapping("/update")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<UpdadeAccountResponse> updateAccount(@RequestParam(required = false) String id,
+	public ResponseEntity<AccountResponse> updateAccount(@RequestParam(required = false) String id,
 			@RequestBody @Valid UpdateAccountRequest request) {
 		if (id == null) {
 			throw new ValidationParamException("id invalid");
 		}
 		Account response = iAccount.updateAccount(id, new Account(request));
-		return ResponseEntity.status(200).body(new UpdadeAccountResponse(response));
+		return ResponseEntity.status(200).body(new AccountResponse(response));
 	}
 }

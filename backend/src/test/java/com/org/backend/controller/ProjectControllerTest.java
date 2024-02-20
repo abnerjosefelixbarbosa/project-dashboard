@@ -1,6 +1,7 @@
 package com.org.backend.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -85,8 +86,9 @@ public class ProjectControllerTest {
 		calendarEnd.set(Calendar.YEAR, localDate.getYear() + 2);
 		calendarEnd.set(Calendar.MONTH, localDate.getMonthValue() - 1);
 		calendarEnd.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		CreateProjectRequest request = new CreateProjectRequest("name1", "description1", Date.from(calendarStart.toInstant()),
-				Date.from(calendarEnd.toInstant()), BigDecimal.valueOf(0.01), account.getId());
+		CreateProjectRequest request = new CreateProjectRequest("name1", "description1",
+				Date.from(calendarStart.toInstant()), Date.from(calendarEnd.toInstant()), BigDecimal.valueOf(0.01),
+				account.getId());
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/projects/create").contentType(MediaType.APPLICATION_JSON)
@@ -163,39 +165,49 @@ public class ProjectControllerTest {
 		project.setAccount(account);
 		project = projectRepository.save(project);
 
-		mockMvc.perform(delete("/api/projects/delete?id=" + project.getId()).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isNoContent())
-				.andDo(print());
+		mockMvc.perform(delete("/api/projects/delete?id=" + project.getId()).accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isNoContent()).andDo(print());
 	}
-	
+
 	@Test
-	public void shouldListAllProjectByIdAndReturn204Status() throws Exception {
+	public void shouldListAllProjectByIdAndReturn200Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
 		Calendar calendarBirth = Calendar.getInstance();
 		calendarBirth.set(Calendar.YEAR, localDate.getYear() - 25);
 		calendarBirth.set(Calendar.MONTH, localDate.getMonthValue() - 1);
 		calendarBirth.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		Calendar calendarStart = Calendar.getInstance();
-		calendarStart.set(Calendar.YEAR, localDate.getYear() + 1);
-		calendarStart.set(Calendar.MONTH, localDate.getMonthValue() - 1);
-		calendarStart.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		Calendar calendarEnd = Calendar.getInstance();
-		calendarEnd.set(Calendar.YEAR, localDate.getYear() + 2);
-		calendarEnd.set(Calendar.MONTH, localDate.getMonthValue() - 1);
-		calendarEnd.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
+		Calendar calendarStart1 = Calendar.getInstance();
+		calendarStart1.set(Calendar.YEAR, localDate.getYear() + 1);
+		calendarStart1.set(Calendar.MONTH, localDate.getMonthValue() - 1);
+		calendarStart1.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
+		Calendar calendarEnd1 = Calendar.getInstance();
+		calendarEnd1.set(Calendar.YEAR, localDate.getYear() + 2);
+		calendarEnd1.set(Calendar.MONTH, localDate.getMonthValue() - 1);
+		calendarEnd1.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
+		Calendar calendarStart2 = Calendar.getInstance();
+		calendarStart2.set(Calendar.YEAR, localDate.getYear() + 2);
+		calendarStart2.set(Calendar.MONTH, localDate.getMonthValue() - 1);
+		calendarStart2.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
+		Calendar calendarEnd2 = Calendar.getInstance();
+		calendarEnd2.set(Calendar.YEAR, localDate.getYear() + 3);
+		calendarEnd2.set(Calendar.MONTH, localDate.getMonthValue() - 1);
+		calendarEnd2.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
 		User user = new User(null, "name1", "email1@gmail.com", "@Password1", Date.from(calendarBirth.toInstant()),
 				null);
 		Account account = new Account(null, new Date(), Level.BASIC, user, null);
-		Project project = new Project(null, "name1", "description1", Date.from(calendarStart.toInstant()),
-				Date.from(calendarEnd.toInstant()), BigDecimal.valueOf(0.01), null);
+		Project project1 = new Project(null, "name1", "description1", Date.from(calendarStart1.toInstant()),
+				Date.from(calendarEnd1.toInstant()), BigDecimal.valueOf(0.01), null);
+		Project project2 = new Project(null, "name2", "description2", Date.from(calendarStart2.toInstant()),
+				Date.from(calendarEnd2.toInstant()), BigDecimal.valueOf(0.50), null);
 
 		userRepository.save(user);
 		account = accountRepository.save(account);
-		project.setAccount(account);
-		project = projectRepository.save(project);
+		project1.setAccount(account);
+		projectRepository.save(project1);
+		project2.setAccount(account);
+		projectRepository.save(project2);
 
-		mockMvc.perform(delete("/api/projects/delete?id=" + project.getId()).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isNoContent())
-				.andDo(print());
+		mockMvc.perform(get("/api/projects/list-all?accountId=" + account.getId()).accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isOk()).andDo(print());
 	}
 }

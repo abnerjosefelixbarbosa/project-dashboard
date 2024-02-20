@@ -25,7 +25,7 @@ public class AccountService implements IAccount {
 
 	@Transactional
 	public Account createAccount(Account account) {
-		validateSaveAccount(account.getUser());
+		validateAccount(account.getUser());
 		account.setLevel(Level.BASIC);
 		account.setDateCreation(new Date());
 		iUser.save(account.getUser());
@@ -42,7 +42,7 @@ public class AccountService implements IAccount {
 
 	@Transactional
 	public Account updateAccount(String id, Account account) {
-		validateSaveAccount(account.getUser());
+		validateAccount(account.getUser());
 		Account findAccountById = findAccountById(id);
 		findAccountById.update(account);
 		iUser.save(findAccountById.getUser());
@@ -55,7 +55,7 @@ public class AccountService implements IAccount {
 		});
 	}
 
-	private void validateSaveAccount(User user) {
+	private void validateAccount(User user) {
 		Date date = new Date();
 		if (user.getDateBirth().toString().equals(date.toString())) {
 			throw new BusinessException("user date birth invalid");
