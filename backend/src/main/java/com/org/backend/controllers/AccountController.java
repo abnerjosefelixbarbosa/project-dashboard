@@ -3,6 +3,9 @@ package com.org.backend.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +19,10 @@ import com.org.backend.dtos.requests.CreateAccountRequest;
 import com.org.backend.dtos.requests.LoginAccountRequest;
 import com.org.backend.dtos.requests.UpdateAccountRequest;
 import com.org.backend.dtos.responses.AccountResponse;
+import com.org.backend.dtos.responses.AccountResponseLogin;
 import com.org.backend.entities.Account;
 import com.org.backend.interfaces.IAccount;
+import com.org.backend.interfaces.IToken;
 
 import jakarta.validation.Valid;
 
@@ -26,6 +31,10 @@ import jakarta.validation.Valid;
 public class AccountController {
 	@Autowired
 	private IAccount iAccount;
+	@Autowired
+	private IToken iToken;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -36,9 +45,12 @@ public class AccountController {
 
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<AccountResponse> loginAccount(@RequestBody @Valid LoginAccountRequest request) {
-		Account response = iAccount.loginAccount(new Account(request));
-		return ResponseEntity.status(200).body(new AccountResponse(response));
+	public ResponseEntity<AccountResponseLogin> loginAccount(@RequestBody @Valid LoginAccountRequest request) {
+		UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(request.emailUser(), request.passwordUser());
+		Authentication auth = authenticationManager.authenticate(user);
+		Account response = (Account) iAccount.loadUserByUsername(request.emailUser());
+		String token = iToken.generateToken((Account) auth.getPrincipal());
+		return ResponseEntity.status(200).body(new AccountResponseLogin(response, token));
 	}
 
 	@PatchMapping("/update-by-id")

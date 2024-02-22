@@ -1,8 +1,10 @@
 package com.org.backend.interfaces;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import com.org.backend.entities.Account;
 
-public interface IAccount {
+public interface IAccount extends UserDetailsService {
 	Account createAccount(Account account);
 	Account loginAccount(Account account);
 	Account updateAccountById(String id, Account account);

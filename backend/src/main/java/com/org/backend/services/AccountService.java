@@ -3,6 +3,8 @@ package com.org.backend.services;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.org.backend.entities.Account;
@@ -66,5 +68,11 @@ public class AccountService implements IAccount {
 		if (accountRepository.existsByUserPassword(user.getPassword())) {
 			throw new BusinessException("user password exist");
 		}
+	}
+
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		return accountRepository.findByUserEmail(email).orElseThrow(() -> {
+			throw new UsernameNotFoundException("user email not found");
+		});
 	}
 }

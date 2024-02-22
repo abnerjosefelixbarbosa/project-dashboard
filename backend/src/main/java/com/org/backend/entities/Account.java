@@ -3,6 +3,11 @@ package com.org.backend.entities;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.org.backend.dtos.requests.CreateAccountRequest;
 import com.org.backend.dtos.requests.LoginAccountRequest;
@@ -27,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account implements Serializable {
+public class Account implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -76,5 +81,37 @@ public class Account implements Serializable {
 		this.user.setEmail(account.getUser().getEmail());
 		this.user.setName(account.getUser().getName());
 		this.user.setPassword(account.getUser().getPassword());
+	}
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		if (level.name().equals("BASIC")) {
+			return List.of(new SimpleGrantedAuthority("ROLE_BASIC"));
+		} else {
+			return List.of(new SimpleGrantedAuthority("ROLE_FULL"));
+		}
+	}
+
+	public String getPassword() {
+		return user.getEmail();
+	}
+
+	public String getUsername() {
+		return user.getEmail();
+	}
+
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	public boolean isEnabled() {
+		return true;
 	}
 }
