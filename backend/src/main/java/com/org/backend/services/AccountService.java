@@ -35,13 +35,13 @@ public class AccountService implements IAccount {
 	public Account loginAccount(Account account) {
 		String userEmail = account.getUser().getEmail();
 		String userPassword = account.getUser().getPassword();
-		return accountRepository.findByUserEmailAndUserPassword(userEmail, userPassword).orElseThrow(() -> {
-			throw new NotFoundException("email user and password user not found");
+		return accountRepository.findByUserEmailOrUserPassword(userEmail, userPassword).orElseThrow(() -> {
+			throw new NotFoundException("email user or password user not found");
 		});
 	}
 
 	@Transactional
-	public Account updateAccount(String id, Account account) {
+	public Account updateAccountById(String id, Account account) {
 		validateAccount(account.getUser());
 		Account findAccountById = findAccountById(id);
 		findAccountById.update(account);
@@ -61,10 +61,10 @@ public class AccountService implements IAccount {
 			throw new BusinessException("user date birth invalid");
 		}
 		if (accountRepository.existsByUserEmail(user.getEmail())) {
-			throw new BusinessException("user email invalid");
+			throw new BusinessException("user email exist");
 		}
 		if (accountRepository.existsByUserPassword(user.getPassword())) {
-			throw new BusinessException("user password invalid");
+			throw new BusinessException("user password exist");
 		}
 	}
 }

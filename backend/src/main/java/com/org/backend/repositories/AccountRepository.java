@@ -11,5 +11,5 @@ import com.org.backend.entities.Account;
 public interface AccountRepository extends JpaRepository<Account, String> {
 	boolean existsByUserEmail(String email);
 	boolean existsByUserPassword(String password);
-	Optional<Account> findByUserEmailAndUserPassword(String email, String password);
+	Optional<Account> findByUserEmailOrUserPassword(String email, String password);
 }

@@ -1,5 +1,6 @@
 package com.org.backend.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -94,7 +95,7 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	public void shouldUpdateAccountAndReturn200Status() throws Exception {
+	public void shouldUpdateAccountByIdAndReturn200Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
 		Calendar calendarDateBith = Calendar.getInstance();
 		calendarDateBith.set(Calendar.YEAR, localDate.getYear() - 25);
@@ -114,9 +115,26 @@ public class AccountControllerTest {
 				Date.from(calendarDateBith1.toInstant()));
 		String obj = objectMapper.writeValueAsString(request);
 
-		mockMvc.perform(patch("/api/accounts/update?id=" + account.getId()).contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(patch("/api/accounts/update-by-id?id=" + account.getId()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andDo(print());
 	}
+	
+	@Test
+	public void shouldFindAccountByIdAndReturn200Status() throws Exception {
+		LocalDate localDate = LocalDate.now();
+		Calendar calendarDateBith = Calendar.getInstance();
+		calendarDateBith.set(Calendar.YEAR, localDate.getYear() - 25);
+		calendarDateBith.set(Calendar.MONTH, localDate.getMonthValue() - 1);
+		calendarDateBith.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
+		User user = new User(null, "name1", "email1@gmail.com", "@Password1", Date.from(calendarDateBith.toInstant()), null);
+		Account account = new Account(null, new Date(), Level.BASIC, user, null);
 
+		userRepository.save(user);
+		account = accountRepository.save(account);
+
+		mockMvc.perform(get("/api/accounts/find-by-id?id=" + account.getId())
+				.accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+				.andDo(print());
+	}
 }

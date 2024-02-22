@@ -3,6 +3,7 @@ package com.org.backend.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,6 @@ import com.org.backend.dtos.requests.LoginAccountRequest;
 import com.org.backend.dtos.requests.UpdateAccountRequest;
 import com.org.backend.dtos.responses.AccountResponse;
 import com.org.backend.entities.Account;
-import com.org.backend.exception.ValidationParamException;
 import com.org.backend.interfaces.IAccount;
 
 import jakarta.validation.Valid;
@@ -41,14 +41,18 @@ public class AccountController {
 		return ResponseEntity.status(200).body(new AccountResponse(response));
 	}
 
-	@PatchMapping("/update")
+	@PatchMapping("/update-by-id")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<AccountResponse> updateAccount(@RequestParam(required = false) String id,
+	public ResponseEntity<AccountResponse> updateAccountById(@RequestParam String id,
 			@RequestBody @Valid UpdateAccountRequest request) {
-		if (id == null) {
-			throw new ValidationParamException("id invalid");
-		}
-		Account response = iAccount.updateAccount(id, new Account(request));
+		Account response = iAccount.updateAccountById(id, new Account(request));
+		return ResponseEntity.status(200).body(new AccountResponse(response));
+	}
+	
+	@GetMapping("/find-by-id")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<AccountResponse> findAccountById(@RequestParam String id) {
+		Account response = iAccount.findAccountById(id);
 		return ResponseEntity.status(200).body(new AccountResponse(response));
 	}
 }

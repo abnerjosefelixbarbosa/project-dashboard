@@ -134,7 +134,7 @@ public class ProjectControllerTest {
 				Date.from(calendarStart1.toInstant()), Date.from(calendarEnd1.toInstant()), BigDecimal.valueOf(0.01));
 		String obj = objectMapper.writeValueAsString(request);
 
-		mockMvc.perform(patch("/api/projects/update?id=" + project.getId()).contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(patch("/api/projects/update-by-id?id=" + project.getId()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(obj)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andDo(print());
 	}
@@ -165,12 +165,12 @@ public class ProjectControllerTest {
 		project.setAccount(account);
 		project = projectRepository.save(project);
 
-		mockMvc.perform(delete("/api/projects/delete?id=" + project.getId()).accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(delete("/api/projects/delete-by-id?id=" + project.getId()).accept(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isNoContent()).andDo(print());
 	}
 
 	@Test
-	public void shouldListAllProjectByIdAndReturn200Status() throws Exception {
+	public void shouldListAllProjectByAccountIdAndReturn200Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
 		Calendar calendarBirth = Calendar.getInstance();
 		calendarBirth.set(Calendar.YEAR, localDate.getYear() - 25);
@@ -207,7 +207,7 @@ public class ProjectControllerTest {
 		project2.setAccount(account);
 		projectRepository.save(project2);
 
-		mockMvc.perform(get("/api/projects/list-all?accountId=" + account.getId()).accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(get("/api/projects/list-all-by-account-id?accountId=" + account.getId()).accept(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isOk()).andDo(print());
 	}
 }

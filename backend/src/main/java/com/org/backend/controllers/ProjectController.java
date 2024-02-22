@@ -19,7 +19,6 @@ import com.org.backend.dtos.requests.CreateProjectRequest;
 import com.org.backend.dtos.requests.UpdateProjectRequest;
 import com.org.backend.dtos.responses.ProjectResponse;
 import com.org.backend.entities.Project;
-import com.org.backend.exception.ValidationParamException;
 import com.org.backend.interfaces.IProject;
 
 import jakarta.validation.Valid;
@@ -37,33 +36,24 @@ public class ProjectController {
 		return ResponseEntity.status(201).body(new ProjectResponse(response));
 	}
 
-	@PatchMapping("/update")
+	@PatchMapping("/update-by-id")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<ProjectResponse> updateProjectById(@RequestParam(required = false) String id,
+	public ResponseEntity<ProjectResponse> updateProjectById(@RequestParam String id,
 			@RequestBody @Valid UpdateProjectRequest request) {
-		if (id == null) {
-			throw new ValidationParamException("id invalid");
-		}
 		Project response = iProject.updateProjectById(id, new Project(request));
 		return ResponseEntity.status(200).body(new ProjectResponse(response));
 	}
 	
-	@DeleteMapping("/delete")
+	@DeleteMapping("/delete-by-id")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public ResponseEntity<Void> deleteProjectById(@RequestParam(required = false) String id) {
-		if (id == null) {
-			throw new ValidationParamException("id invalid");
-		}
+	public ResponseEntity<Void> deleteProjectById(@RequestParam String id) {
 		iProject.deleteProjectById(id);
 		return ResponseEntity.status(204).body(null);
 	}
 	
-	@GetMapping("/list-all")
+	@GetMapping("/list-all-by-account-id")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Page<ProjectResponse>> listAllProjectById(@RequestParam(required = false) String accountId, Pageable pageable) {
-		if (accountId == null) {
-			throw new ValidationParamException("account id invalid");
-		}
+	public ResponseEntity<Page<ProjectResponse>> listAllProjectByAccountId(@RequestParam String accountId, Pageable pageable) {
 		Page<Project> responses = iProject.findAllProjectByAccountId(accountId, pageable);
 		return ResponseEntity.status(200).body(responses.map(ProjectResponse::new));
 	}

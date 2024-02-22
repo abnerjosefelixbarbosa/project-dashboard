@@ -62,16 +62,16 @@ public class ProjectService implements IProject {
 			throw new BusinessException("date start invalid");
 		}
 		if (project.getDateEnd().before(project.getDateStart())) {
-			throw new BusinessException("date end invalid");
+			throw new BusinessException("date end before date start");
 		}
         if (project.getDateEnd().equals(project.getDateStart())) {
-        	throw new BusinessException("date end invalid");
+        	throw new BusinessException("date end equal date start");
 		}
         if (project.getBudget().doubleValue() == 0.00) {
-        	throw new BusinessException("budget invalid");
+        	throw new BusinessException("budget equal 0.00");
         }
         if (project.getBudget().scale() != 2) {
-        	throw new BusinessException("budget invalid");
+        	throw new BusinessException("budget different from scale 2");
         }
 	}
 }
