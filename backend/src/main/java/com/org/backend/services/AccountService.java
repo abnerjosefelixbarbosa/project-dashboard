@@ -1,10 +1,11 @@
 package com.org.backend.services;
 
-import java.util.Date;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.org.backend.entities.Account;
@@ -29,7 +30,8 @@ public class AccountService implements IAccount {
 	public Account createAccount(Account account) {
 		validateAccount(account.getUser());
 		account.setLevel(Level.BASIC);
-		account.setDateCreation(new Date());
+		String encoder = crypt().encode(account.getPassword());
+		account.getUser().setPassword(encoder);
 		iUser.save(account.getUser());
 		return accountRepository.save(account);
 	}
@@ -38,7 +40,7 @@ public class AccountService implements IAccount {
 		String userEmail = account.getUser().getEmail();
 		String userPassword = account.getUser().getPassword();
 		return accountRepository.findByUserEmailOrUserPassword(userEmail, userPassword).orElseThrow(() -> {
-			throw new NotFoundException("email user or password user not found");
+			throw new NotFoundException("Email user or password user not found");
 		});
 	}
 
@@ -53,26 +55,33 @@ public class AccountService implements IAccount {
 
 	public Account findAccountById(String id) {
 		return accountRepository.findById(id).orElseThrow(() -> {
-			throw new NotFoundException("account id not found");
+			throw new NotFoundException("Account id not found");
 		});
-	}
-
-	private void validateAccount(User user) {
-		Date date = new Date();
-		if (user.getDateBirth().toString().equals(date.toString())) {
-			throw new BusinessException("user date birth invalid");
-		}
-		if (accountRepository.existsByUserEmail(user.getEmail())) {
-			throw new BusinessException("user email exist");
-		}
-		if (accountRepository.existsByUserPassword(user.getPassword())) {
-			throw new BusinessException("user password exist");
-		}
 	}
 
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		return accountRepository.findByUserEmail(email).orElseThrow(() -> {
-			throw new UsernameNotFoundException("user email not found");
+			throw new UsernameNotFoundException("User email not found");
 		});
+	}
+	
+	private void validateAccount(User user) {
+		if (accountRepository.existsByUserEmail(user.getEmail())) {
+			throw new BusinessException("User email exist");
+		}
+		Stream<Account> stream = accountRepository.findAll().parallelStream();
+		boolean matches = stream.anyMatch((val) -> {
+			if (crypt().matches(user.getPassword(), val.getPassword())) {
+				return true;
+			}
+			return false;
+		});
+		if (matches) {
+			throw new BusinessException("User password exist");
+		}
+	}
+	
+	private BCryptPasswordEncoder crypt() {
+		return new BCryptPasswordEncoder();
 	}
 }

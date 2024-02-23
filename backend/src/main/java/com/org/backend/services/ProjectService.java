@@ -1,7 +1,5 @@
 package com.org.backend.services;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,11 +55,7 @@ public class ProjectService implements IProject {
 	}
 	
 	private void validateProject(Project project) {
-		Date date = new Date();
-		if (project.getDateStart().toString().equals(date.toString())) {
-			throw new BusinessException("date start invalid");
-		}
-		if (project.getDateEnd().before(project.getDateStart())) {
+		if (project.getDateEnd().isBefore(project.getDateStart())) {
 			throw new BusinessException("date end before date start");
 		}
         if (project.getDateEnd().equals(project.getDateStart())) {

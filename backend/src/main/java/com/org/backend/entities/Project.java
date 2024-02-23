@@ -2,7 +2,7 @@ package com.org.backend.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,10 +38,10 @@ public class Project implements Serializable {
 	private String description;
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateStart;
+	private LocalDate dateStart;
 	@Column(nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dateEnd;
+	private LocalDate dateEnd;
 	@Column(nullable = false)
 	private BigDecimal budget;
 	@ManyToOne

@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.jupiter.api.AfterEach;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -60,12 +60,13 @@ public class AccountControllerTest {
 	@Test
 	public void shouldCreateAccountAndReturn201Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
-		Calendar calendarBirthUser = Calendar.getInstance();
-		calendarBirthUser.set(Calendar.YEAR, localDate.getYear() - 25);
-		calendarBirthUser.set(Calendar.MONTH, localDate.getMonthValue() - 1);
-		calendarBirthUser.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		CreateAccountRequest request = new CreateAccountRequest("name1", "email1@gmail.com", "@Password1",
-				Date.from(calendarBirthUser.toInstant()));
+		User user = new User(null, "name1", "email1@gmail.com", crypt().encode("@Password1"), localDate.withYear(1999), null);
+		Account account = new Account(null, new Date(), Level.BASIC, user, null);
+
+		userRepository.save(user);
+		accountRepository.save(account);
+		
+		CreateAccountRequest request = new CreateAccountRequest("name2", "email2@gmail.com", "@Password2", localDate.withYear(1995));
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/accounts/create").contentType(MediaType.APPLICATION_JSON)
@@ -76,11 +77,7 @@ public class AccountControllerTest {
 	@Test
 	public void shouldLoginAccountAndReturn200Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
-		Calendar calendarDateBith = Calendar.getInstance();
-		calendarDateBith.set(Calendar.YEAR, localDate.getYear() - 25);
-		calendarDateBith.set(Calendar.MONTH, localDate.getMonthValue() - 1);
-		calendarDateBith.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		User user = new User(null, "name1", "email1@gmail.com", "@Password1", Date.from(calendarDateBith.toInstant()), null);
+		User user = new User(null, "name1", "email1@gmail.com", crypt().encode("@Password1"), localDate.withYear(1999), null);
 		Account account = new Account(null, new Date(), Level.BASIC, user, null);
 
 		userRepository.save(user);
@@ -97,22 +94,13 @@ public class AccountControllerTest {
 	@Test
 	public void shouldUpdateAccountByIdAndReturn200Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
-		Calendar calendarDateBith = Calendar.getInstance();
-		calendarDateBith.set(Calendar.YEAR, localDate.getYear() - 25);
-		calendarDateBith.set(Calendar.MONTH, localDate.getMonthValue() - 1);
-		calendarDateBith.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		User user = new User(null, "name1", "email1@gmail.com", "@Password1", Date.from(calendarDateBith.toInstant()), null);
+		User user = new User(null, "name1", "email1@gmail.com", crypt().encode("@Password1"), localDate.withYear(1999), null);
 		Account account = new Account(null, new Date(), Level.BASIC, user, null);
 
 		userRepository.save(user);
 		account = accountRepository.save(account);
 
-		Calendar calendarDateBith1 = Calendar.getInstance();
-		calendarDateBith1.set(Calendar.YEAR, localDate.getYear() - 20);
-		calendarDateBith1.set(Calendar.MONTH, localDate.getMonthValue() - 1);
-		calendarDateBith1.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name2", "email2@gmail.com", "@Password2",
-				Date.from(calendarDateBith1.toInstant()));
+		UpdateAccountRequest request = new UpdateAccountRequest(Level.FULL, "name1", "email2@gmail.com", "@Password2", localDate.withYear(1995));
 		String obj = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(patch("/api/accounts/update-by-id?id=" + account.getId()).contentType(MediaType.APPLICATION_JSON)
@@ -123,11 +111,7 @@ public class AccountControllerTest {
 	@Test
 	public void shouldFindAccountByIdAndReturn200Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
-		Calendar calendarDateBith = Calendar.getInstance();
-		calendarDateBith.set(Calendar.YEAR, localDate.getYear() - 25);
-		calendarDateBith.set(Calendar.MONTH, localDate.getMonthValue() - 1);
-		calendarDateBith.set(Calendar.DAY_OF_MONTH, localDate.getDayOfMonth());
-		User user = new User(null, "name1", "email1@gmail.com", "@Password1", Date.from(calendarDateBith.toInstant()), null);
+		User user = new User(null, "name1", "email1@gmail.com", crypt().encode("@Password1"), localDate.withYear(1999), null);
 		Account account = new Account(null, new Date(), Level.BASIC, user, null);
 
 		userRepository.save(user);
@@ -136,5 +120,9 @@ public class AccountControllerTest {
 		mockMvc.perform(get("/api/accounts/find-by-id?id=" + account.getId())
 				.accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andDo(print());
+	}
+	
+	private BCryptPasswordEncoder crypt() {
+		return new BCryptPasswordEncoder();
 	}
 }

@@ -56,6 +56,7 @@ public class Account implements Serializable, UserDetails {
 		user.setPassword(request.passwordUser());
 		user.setName(request.nameUser());
 		this.user = user;
+		this.dateCreation = new Date();
 	}
 	
 	public Account(LoginAccountRequest request) {
@@ -92,7 +93,7 @@ public class Account implements Serializable, UserDetails {
 	}
 
 	public String getPassword() {
-		return user.getEmail();
+		return user.getPassword();
 	}
 
 	public String getUsername() {

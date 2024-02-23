@@ -1,8 +1,8 @@
 package com.org.backend.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +40,7 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private String password;
 	@Column(nullable = false)
-	private Date dateBirth;
+	private LocalDate dateBirth;
 	@OneToMany(mappedBy = "user")
 	private Collection<Account> accounts;
 }

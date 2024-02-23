@@ -39,7 +39,7 @@ public class SecurityConfig {
 			});
 		}).cors(Customizer.withDefaults()).authorizeHttpRequests((auth) -> {
 			auth.requestMatchers(AUTH_WHITELIST).permitAll();
-			auth.anyRequest().authenticated();
+			auth.anyRequest().permitAll();
 		}).sessionManagement((session) -> {
 			session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		}).httpBasic(Customizer.withDefaults())
@@ -58,10 +58,10 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
-		var authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService());
-		authenticationProvider.setPasswordEncoder(passwordEncoder());
-		return authenticationProvider;
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+		daoAuthenticationProvider.setUserDetailsService(userDetailsService());
+		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+		return daoAuthenticationProvider;
 	}
 
 	@Bean
@@ -72,6 +72,6 @@ public class SecurityConfig {
 	private static final AntPathRequestMatcher[] AUTH_WHITELIST = { AntPathRequestMatcher.antMatcher("/h2-console/**"),
 			AntPathRequestMatcher.antMatcher("/v1/auth/**"), AntPathRequestMatcher.antMatcher("/v3/api-docs/**"),
 			AntPathRequestMatcher.antMatcher("/v3/api-docs.yaml"), AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
-			AntPathRequestMatcher.antMatcher("/swagger-ui.html"), AntPathRequestMatcher.antMatcher("/accounts/create"),
-			AntPathRequestMatcher.antMatcher("/accounts/login") };
+			AntPathRequestMatcher.antMatcher("/swagger-ui.html"), AntPathRequestMatcher.antMatcher("/api/accounts/create"),
+			AntPathRequestMatcher.antMatcher("/api/accounts/login") };
 }
