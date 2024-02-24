@@ -32,7 +32,6 @@ public class ExcepitionController {
 	public ResponseEntity<ExceptionDetails> handleValidationParamException(Exception e, HttpServletRequest request) {
 		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), 400, e.getMessage(),
 				request.getRequestURI());
-
 		return ResponseEntity.status(400).body(exceptionDetails);
 	}
 
@@ -40,7 +39,6 @@ public class ExcepitionController {
 	public ResponseEntity<ExceptionDetails> handleBusinessException(BusinessException e, HttpServletRequest request) {
 		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), 400, e.getMessage(),
 				request.getRequestURI());
-
 		return ResponseEntity.status(400).body(exceptionDetails);
 	}
 
@@ -48,7 +46,6 @@ public class ExcepitionController {
 	public ResponseEntity<ExceptionDetails> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
 		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), 404, e.getMessage(),
 				request.getRequestURI());
-
 		return ResponseEntity.status(404).body(exceptionDetails);
 	}
 }

@@ -21,6 +21,7 @@ import com.org.backend.dtos.requests.UpdateAccountRequest;
 import com.org.backend.dtos.responses.AccountResponse;
 import com.org.backend.dtos.responses.AccountResponseLogin;
 import com.org.backend.entities.Account;
+import com.org.backend.exception.ValidationParamException;
 import com.org.backend.interfaces.IAccount;
 import com.org.backend.interfaces.IToken;
 
@@ -55,15 +56,21 @@ public class AccountController {
 
 	@PatchMapping("/update-by-id")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<AccountResponse> updateAccountById(@RequestParam String id,
+	public ResponseEntity<AccountResponse> updateAccountById(@RequestParam(required = false) String id,
 			@RequestBody @Valid UpdateAccountRequest request) {
+		if (id == null) {
+			throw new ValidationParamException("Param id null");
+		}
 		Account response = iAccount.updateAccountById(id, new Account(request));
 		return ResponseEntity.status(200).body(new AccountResponse(response));
 	}
 	
 	@GetMapping("/find-by-id")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<AccountResponse> findAccountById(@RequestParam String id) {
+	public ResponseEntity<AccountResponse> findAccountById(@RequestParam(required =  false) String id) {
+		if (id == null) {
+			throw new ValidationParamException("Param id null");
+		}
 		Account response = iAccount.findAccountById(id);
 		return ResponseEntity.status(200).body(new AccountResponse(response));
 	}

@@ -19,6 +19,7 @@ import com.org.backend.dtos.requests.CreateProjectRequest;
 import com.org.backend.dtos.requests.UpdateProjectRequest;
 import com.org.backend.dtos.responses.ProjectResponse;
 import com.org.backend.entities.Project;
+import com.org.backend.exception.ValidationParamException;
 import com.org.backend.interfaces.IProject;
 
 import jakarta.validation.Valid;
@@ -38,22 +39,31 @@ public class ProjectController {
 
 	@PatchMapping("/update-by-id")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<ProjectResponse> updateProjectById(@RequestParam String id,
+	public ResponseEntity<ProjectResponse> updateProjectById(@RequestParam(required = false) String id,
 			@RequestBody @Valid UpdateProjectRequest request) {
+		if (id == null) {
+			throw new ValidationParamException("Param id null");
+		}
 		Project response = iProject.updateProjectById(id, new Project(request));
 		return ResponseEntity.status(200).body(new ProjectResponse(response));
 	}
 	
 	@DeleteMapping("/delete-by-id")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public ResponseEntity<Void> deleteProjectById(@RequestParam String id) {
+	public ResponseEntity<Void> deleteProjectById(@RequestParam(required = false) String id) {
+		if (id == null) {
+			throw new ValidationParamException("Param id null");
+		}
 		iProject.deleteProjectById(id);
 		return ResponseEntity.status(204).body(null);
 	}
 	
 	@GetMapping("/list-all-by-account-id")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Page<ProjectResponse>> listAllProjectByAccountId(@RequestParam String accountId, Pageable pageable) {
+	public ResponseEntity<Page<ProjectResponse>> listAllProjectByAccountId(@RequestParam(required = false) String accountId, Pageable pageable) {
+		if (accountId == null) {
+			throw new ValidationParamException("Param account id null");
+		}
 		Page<Project> responses = iProject.findAllProjectByAccountId(accountId, pageable);
 		return ResponseEntity.status(200).body(responses.map(ProjectResponse::new));
 	}
