@@ -70,15 +70,15 @@ public class AccountService implements IAccount {
 			throw new BusinessException("User email exist");
 		}
 		Stream<Account> stream = accountRepository.findAll().parallelStream();
-		boolean matches = stream.anyMatch((val) -> {
+		stream.anyMatch((val) -> {
 			if (crypt().matches(user.getPassword(), val.getPassword())) {
-				return true;
+				throw new BusinessException("User password exist");
 			}
 			return false;
 		});
-		if (matches) {
-			throw new BusinessException("User password exist");
-		}
+		//if (matches) {
+			//throw new BusinessException("User password exist");
+		//}
 	}
 	
 	private BCryptPasswordEncoder crypt() {

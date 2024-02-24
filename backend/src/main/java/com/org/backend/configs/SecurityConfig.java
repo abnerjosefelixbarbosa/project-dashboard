@@ -39,7 +39,7 @@ public class SecurityConfig {
 			});
 		}).cors(Customizer.withDefaults()).authorizeHttpRequests((auth) -> {
 			auth.requestMatchers(AUTH_WHITELIST).permitAll();
-			auth.anyRequest().permitAll();
+			auth.anyRequest().authenticated();
 		}).sessionManagement((session) -> {
 			session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		}).httpBasic(Customizer.withDefaults())

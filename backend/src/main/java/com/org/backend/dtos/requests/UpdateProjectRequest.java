@@ -9,8 +9,8 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateProjectRequest(
-		@NotNull(message = "name null") @Length(min = 1, max = 100, message = "name at min 1 and max 100") String name,
-		@NotNull(message = "description null") @Length(min = 1, max = 200, message = "description at min 1 and max 200") String description,
-		@NotNull(message = "date start null") @Future(message = "date start invalid") LocalDate dateStart,
-		@NotNull(message = "date end null") LocalDate dateEnd, @NotNull(message = "budget null") BigDecimal budget) {
+		@NotNull(message = "Name null") @Length(min = 1, max = 100, message = "Name at min 1 and max 100") String name,
+		@NotNull(message = "Description null") @Length(min = 1, max = 200, message = "Description at min 1 and max 200") String description,
+		@NotNull(message = "Date start null") @Future(message = "Date start future") LocalDate dateStart,
+		@NotNull(message = "Date end null") LocalDate dateEnd, @NotNull(message = "Budget null") BigDecimal budget) {
 }

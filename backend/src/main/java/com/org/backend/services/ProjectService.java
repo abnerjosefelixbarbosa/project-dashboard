@@ -45,7 +45,7 @@ public class ProjectService implements IProject {
 	
 	public Project findProjectById(String id) {
 		return projectRepository.findById(id).orElseThrow(() -> {
-			throw new NotFoundException("project id not found");
+			throw new NotFoundException("Project id not found");
 		});
 	}
 	
@@ -56,16 +56,16 @@ public class ProjectService implements IProject {
 	
 	private void validateProject(Project project) {
 		if (project.getDateEnd().isBefore(project.getDateStart())) {
-			throw new BusinessException("date end before date start");
+			throw new BusinessException("Date end before date start");
 		}
         if (project.getDateEnd().equals(project.getDateStart())) {
-        	throw new BusinessException("date end equal date start");
+        	throw new BusinessException("Date end equal date start");
 		}
         if (project.getBudget().doubleValue() == 0.00) {
-        	throw new BusinessException("budget equal 0.00");
+        	throw new BusinessException("Budget equal 0.00");
         }
         if (project.getBudget().scale() != 2) {
-        	throw new BusinessException("budget different from scale 2");
+        	throw new BusinessException("Budget different from scale 2");
         }
 	}
 }

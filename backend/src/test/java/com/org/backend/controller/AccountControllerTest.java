@@ -75,7 +75,7 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	public void shouldLoginAccountAndReturn200Status() throws Exception {
+	public void shouldLoginAccoundReturn200Status() throws Exception {
 		LocalDate localDate = LocalDate.now();
 		User user = new User(null, "name1", "email1@gmail.com", crypt().encode("@Password1"), localDate.withYear(1999), null);
 		Account account = new Account(null, new Date(), Level.BASIC, user, null);
