@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -34,7 +33,6 @@ import com.org.backend.repositories.UserRepository;
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@ContextConfiguration
 public class AccountControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
