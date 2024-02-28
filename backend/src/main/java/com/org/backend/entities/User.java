@@ -13,23 +13,20 @@ import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(
-	name = "tb_user",
-	indexes = {
-		@Index(columnList = "email", unique = true),
-		@Index(columnList = "password", unique = true)
-	}
-)
-@Data
-@NoArgsConstructor
+@Table(name = "tb_user", indexes = { @Index(columnList = "email", unique = true),
+		@Index(columnList = "password", unique = true) })
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;

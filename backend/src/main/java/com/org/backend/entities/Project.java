@@ -18,14 +18,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_project")
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -47,7 +49,7 @@ public class Project implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "account_id", nullable = false)
 	private Account account;
-	
+
 	public Project(CreateProjectRequest request) {
 		Account account = new Account();
 		account.setId(request.accountId());
