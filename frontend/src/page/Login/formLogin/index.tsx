@@ -6,7 +6,9 @@ import { loginAccount } from "../../../service/serviceAccount";
 
 const regex = RegExp("^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$");
 const schema = z.object({
-  emailUser: z.string().nonempty("Email empty").email("Email invalid"),
+  emailUser: z.string()
+    .nonempty("Email empty")
+    .email("Email invalid"),
   passwordUser: z
     .string()
     .nonempty("Password empty")
@@ -29,8 +31,12 @@ export function FormLogin() {
   });
 
   async function handleLogin(data: FormLogin) {
-    const res = await loginAccount(data);
-    console.log(res);
+    try {
+      const res = await loginAccount(data);
+      alert(res.token)
+    } catch (e: any) {
+      setError("root", { message: e.message })
+    }
   }
 
   return (
@@ -38,6 +44,9 @@ export function FormLogin() {
       <Container className="container_form">
         <Row>
           <Form onSubmit={handleSubmit(handleLogin)}>
+            <Form.Text className="text_color">
+              {errors.root?.message}
+            </Form.Text>
             <Form.Group className="mb-3">
               <Form.Label>Email:</Form.Label>
               <Form.Control {...register("emailUser")} type="text" />
