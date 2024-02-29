@@ -23,7 +23,7 @@ export function NavbarLandingPage() {
             </Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link as={Link} to={"/login"}>
+            <Nav.Link as={Link} to={"/account/login"}>
               SignIn
             </Nav.Link>
           </Nav>

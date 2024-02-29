@@ -1,4 +1,5 @@
-import { UnauthorizedError } from "../exception/UnauthorizedError";
+
+import { UnauthorizedError } from "../exception/unauthorizedError";
 import { BASE_URL } from "../utils/request";
 
 export async function loginAccount(data: any) {
@@ -9,10 +10,10 @@ export async function loginAccount(data: any) {
     },
     body: JSON.stringify(data),
   });
-  if (res.status === 401) {
-    throw new UnauthorizedError("Unauthorized")
-  }
   const json = await res.json();
+  if (json.message) {
+    throw new UnauthorizedError("email or password not exists")
+  }
   return {
     id: json.id,
     dateCreation: json.dateCreation,

@@ -10,14 +10,23 @@ import { User } from "@supabase/supabase-js";
 import { getUser } from "../../../service/auth";
 
 const schema = z.object({
-  name: z.string().min(1, "min 1 character").max(100, "max 100 characters"),
+  name: z
+    .string()
+    .min(1, "min 1 character")
+    .max(100, "max 100 characters"),
   description: z
     .string()
     .min(1, "min 1 character")
     .max(200, "max 200 character"),
-  start: z.coerce.date().min(new Date(), "min future date"),
-  end: z.coerce.date().min(new Date(), "min future date"),
-  budget: z.coerce.number(),
+  start: z.coerce.date()
+    .min(new Date(), "min future date"),
+  end: z
+    .coerce
+    .date()
+    .min(new Date(), "min future date"),
+  budget: z
+    .coerce
+    .number(),
 });
 
 type FormSave = z.infer<typeof schema>;

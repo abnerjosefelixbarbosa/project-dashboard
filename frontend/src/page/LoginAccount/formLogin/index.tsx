@@ -3,6 +3,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginAccount } from "../../../service/serviceAccount";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.css";
+import { Link } from "react-router-dom";
 
 const regex = RegExp("^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$");
 const schema = z.object({
@@ -22,7 +25,6 @@ export function FormLogin() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<FormLogin>({
     mode: "all",
@@ -33,20 +35,18 @@ export function FormLogin() {
   async function handleLogin(data: FormLogin) {
     try {
       const res = await loginAccount(data);
-      alert(res.token)
+      alert(res.token);
     } catch (e: any) {
-      setError("root", { message: e.message })
+      toast.error(e.message);
     }
   }
 
   return (
     <>
+      <ToastContainer />
       <Container className="container_form">
         <Row>
           <Form onSubmit={handleSubmit(handleLogin)}>
-            <Form.Text className="text_color">
-              {errors.root?.message}
-            </Form.Text>
             <Form.Group className="mb-3">
               <Form.Label>Email:</Form.Label>
               <Form.Control {...register("emailUser")} type="text" />
@@ -65,6 +65,10 @@ export function FormLogin() {
               <Button variant="primary" type="submit" size="lg">
                 Login
               </Button>
+              ou
+              <Link to={"/account/create"}>
+                create account
+              </Link>
             </div>
           </Form>
         </Row>

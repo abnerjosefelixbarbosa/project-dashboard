@@ -3,7 +3,7 @@ import { NavbarLandingPage } from "../../components/NavbarLandingPage";
 import { FormLogin } from "./formLogin";
 import "./index.css";
 
-export function Login() {
+export function LoginAccount() {
   return (
     <>
       <NavbarLandingPage />

@@ -48,4 +48,11 @@ public class ExcepitionController {
 				request.getRequestURI());
 		return ResponseEntity.status(404).body(exceptionDetails);
 	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<ExceptionDetails> handleRuntimeException(RuntimeException e, HttpServletRequest request) {
+		ExceptionDetails exceptionDetails = new ExceptionDetails(LocalDateTime.now(), 400, e.getMessage(), 
+				request.getRequestURI());
+		return ResponseEntity.status(400).body(exceptionDetails);
+	}
 }
