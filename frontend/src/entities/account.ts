@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { User } from "./user";
 import { Level } from "./level";
 
 export type Account = {

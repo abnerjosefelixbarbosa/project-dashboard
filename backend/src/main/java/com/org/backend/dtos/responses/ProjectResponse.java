@@ -15,7 +15,7 @@ public record ProjectResponse(
 	@JsonFormat(pattern = "yyyy-MM-dd") 
 	LocalDate dateEnd,
 	BigDecimal budget,
-	AccountResponse accountResponse
+	AccountResponse account
 ) {
 	public ProjectResponse(Project project) {
 		this(

@@ -35,7 +35,7 @@ export function FormLogin() {
   async function handleLogin(data: FormLogin) {
     try {
       const res = await loginAccount(data);
-      alert(res.token);
+      console.log(res);
     } catch (e: any) {
       toast.error(e.message);
     }
@@ -49,14 +49,14 @@ export function FormLogin() {
           <Form onSubmit={handleSubmit(handleLogin)}>
             <Form.Group className="mb-3">
               <Form.Label>Email:</Form.Label>
-              <Form.Control {...register("emailUser")} type="text" />
+              <Form.Control {...register("emailUser")} type="email" />
               <Form.Text className="text_color">
                 {errors.emailUser?.message}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Password:</Form.Label>
-              <Form.Control {...register("passwordUser")} type="text" />
+              <Form.Control {...register("passwordUser")} type="password" />
               <Form.Text className="text_color">
                 {errors.passwordUser?.message}
               </Form.Text>

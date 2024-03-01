@@ -11,7 +11,7 @@ public record AccountResponse(
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	Date dateCreation,
 	Level level,
-	UserResponse userResponse
+	UserResponse user
 ) {
 	public AccountResponse(Account account) {
 		this(

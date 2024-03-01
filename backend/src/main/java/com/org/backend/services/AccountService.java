@@ -61,24 +61,21 @@ public class AccountService implements IAccount {
 
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		return accountRepository.findByUserEmail(email).orElseThrow(() -> {
-			throw new UsernameNotFoundException("User email not found");
+			throw new UsernameNotFoundException("Email user not found");
 		});
 	}
 	
 	private void validateAccount(User user) {
 		if (accountRepository.existsByUserEmail(user.getEmail())) {
-			throw new BusinessException("User email exist");
+			throw new BusinessException("Email user exist");
 		}
 		Stream<Account> stream = accountRepository.findAll().parallelStream();
 		stream.anyMatch((val) -> {
 			if (crypt().matches(user.getPassword(), val.getPassword())) {
-				throw new BusinessException("User password exist");
+				throw new BusinessException("Password user exist");
 			}
 			return false;
 		});
-		//if (matches) {
-			//throw new BusinessException("User password exist");
-		//}
 	}
 	
 	private BCryptPasswordEncoder crypt() {

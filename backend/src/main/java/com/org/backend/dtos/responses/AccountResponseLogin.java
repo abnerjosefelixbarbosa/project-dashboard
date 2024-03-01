@@ -11,7 +11,7 @@ public record AccountResponseLogin(
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	Date dateCreation,
 	Level level,
-	UserResponse userResponse,
+	UserResponse user,
 	String token
 ) {
 	public AccountResponseLogin(Account account, String token) {

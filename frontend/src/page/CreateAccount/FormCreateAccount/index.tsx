@@ -4,10 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
+import { ValidationFormError } from "../../../exception/validationFormError";
+import { createAccount } from "../../../service/serviceAccount";
 
 const regex = RegExp("^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$");
 const date = new Date();
-//date.setDate(-1);
 const schema = z.object({
   nameUser: z
     .string()
@@ -25,7 +26,7 @@ const schema = z.object({
   dateBirthUser: z
     .coerce
     .date()
-    .max(date, "date birth user past"),
+    .max(date, "Date birth user past"),
 });
 
 type FormCreateAccount = z.infer<typeof schema>;
@@ -44,22 +45,27 @@ export function FormCreateAccount() {
 
   async function handleCreate(data: FormCreateAccount) {
     try {
-      if (validateForm(data)) {
-        console.log("ok")
-      }
+      validateForm(data);
+      const res = await createAccount(data);
+      console.log(res);
+      toast.success("Account create");
     } catch (e: any) {
-      toast.error(e.message);
+      const message = `${e.message}`; 
+      if (message.includes("Date birth user")) {
+        setError("dateBirthUser", { message: message });
+      } else {
+        toast.error(e.message);
+      }
     }
   }
 
+
+
   function validateForm(data: FormCreateAccount) {
-    const date1 = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-    const date2 = `${data.dateBirthUser.getFullYear()}-${data.dateBirthUser.getMonth()}-${data.dateBirthUser.getDate() + 1}`;
-    if (date1 === date2) {
-      setError("dateBirthUser", { message: "date birth user past" })
-      return false;
+    data.dateBirthUser.setDate(data.dateBirthUser.getDate() + 1);
+    if (data.dateBirthUser.toDateString() === date.toDateString()) {
+      throw new ValidationFormError("Date birth user past");
     }
-    return true;
   }
 
   return (
