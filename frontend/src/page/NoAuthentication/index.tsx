@@ -1,16 +1,13 @@
 import { Button, Card, Container } from "react-bootstrap";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "../../service/auth";
 
 export function NoAuthentication() {
   const navigate = useNavigate();
 
   function handleBackLogin() {
-    signOut().then(() => {
-      navigate("/login", {
-        replace: true,
-      });
+    navigate("/account/login", {
+      replace: true,
     });
   }
 

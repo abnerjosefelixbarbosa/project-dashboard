@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { loginAccount } from "../../../service/serviceAccount";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const regex = RegExp("^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$");
 const schema = z.object({
@@ -31,13 +31,21 @@ export function FormLogin() {
     reValidateMode: "onSubmit",
     resolver: zodResolver(schema),
   });
+  const navigate = useNavigate();
 
   async function handleLogin(data: FormLogin) {
     try {
       const res = await loginAccount(data);
-      console.log(res);
+      navigate("/project/list", {
+        replace: true,
+        state: {
+          token: res.token,
+          accountId: res.id
+        }
+      })
     } catch (e: any) {
-      toast.error(e.message);
+      const message = `${e.message}`;
+      toast.error(message);
     }
   }
 

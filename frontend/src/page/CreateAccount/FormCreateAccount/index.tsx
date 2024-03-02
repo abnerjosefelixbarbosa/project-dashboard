@@ -2,10 +2,11 @@ import { Button, Container, Form, Row } from "react-bootstrap";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/ReactToastify.css";
 import { ValidationFormError } from "../../../exception/validationFormError";
 import { createAccount } from "../../../service/serviceAccount";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.css";
 
 const regex = RegExp("^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$");
 const date = new Date();
@@ -42,13 +43,18 @@ export function FormCreateAccount() {
     reValidateMode: "onSubmit",
     resolver: zodResolver(schema),
   });
+  const navigate = useNavigate();
 
   async function handleCreate(data: FormCreateAccount) {
     try {
+      data.dateBirthUser.setDate(data.dateBirthUser.getDate() + 1);
       validateForm(data);
       const res = await createAccount(data);
-      console.log(res);
-      toast.success("Account create");
+      if (res.id !== undefined) {
+        navigate("/account/login", {
+          replace: true
+        });
+      }
     } catch (e: any) {
       const message = `${e.message}`; 
       if (message.includes("Date birth user")) {
@@ -59,11 +65,8 @@ export function FormCreateAccount() {
     }
   }
 
-
-
   function validateForm(data: FormCreateAccount) {
-    data.dateBirthUser.setDate(data.dateBirthUser.getDate() + 1);
-    if (data.dateBirthUser.toDateString() === date.toDateString()) {
+    if (data.dateBirthUser.toDateString() == date.toDateString()) {
       throw new ValidationFormError("Date birth user past");
     }
   }

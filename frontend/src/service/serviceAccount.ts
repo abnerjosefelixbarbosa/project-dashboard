@@ -1,4 +1,5 @@
 
+import { Account } from "../entities/account";
 import { Level } from "../entities/level";
 import { User } from "../entities/user";
 import { BadRequestError } from "../exception/badRequestError";
@@ -22,23 +23,10 @@ export async function loginAccount(data: any) {
   });
   const json = await res.json();
   if (json.message) {
-    throw new BadRequestError("Email or password user not exists");
+    throw new BadRequestError(json.message);
   }
-  const obj: LoginResponse = {
-    id: json.id,
-    dateCreation: json.dateCreation,
-    level: json.level,
-    user: json.user,
-    token: json.token
-  }
+  const obj: LoginResponse = { ...json }
   return obj;
-}
-
-type CreateResponse = {
-  id: string,
-	dateCreation: Date,
-	level: Level,
-	user: User
 }
 
 export async function createAccount(data: any) {
@@ -53,11 +41,6 @@ export async function createAccount(data: any) {
   if (json.message) {
     throw new BadRequestError(json.message);
   }
-  const obj: CreateResponse = {
-    id: json.id,
-    dateCreation: json.dateCreation,
-    level: json.level,
-    user: json.user
-  }
+  const obj: Account = { ...json }
   return obj;
 }
