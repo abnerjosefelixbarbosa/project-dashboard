@@ -1,6 +1,6 @@
 import { Card, Container } from "react-bootstrap";
 import { NavbarLandingPage } from "../../components/NavbarLandingPage";
-import { Footer } from "../../components/Footer/index,";
+import { Footer } from "../../components/Footer";
 
 export function About() {
   return (

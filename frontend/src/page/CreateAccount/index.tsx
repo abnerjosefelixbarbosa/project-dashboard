@@ -1,4 +1,4 @@
-import { Footer } from "../../components/Footer/index,";
+import { Footer } from "../../components/Footer";
 import { NavbarLandingPage } from "../../components/NavbarLandingPage";
 import { FormCreateAccount } from "./FormCreateAccount";
 

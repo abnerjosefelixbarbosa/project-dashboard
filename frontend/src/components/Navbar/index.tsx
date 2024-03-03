@@ -1,11 +1,15 @@
+import { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export function NavBar() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const token = location.state.token;
+  const accountId = location.state.accountId;
 
   function handleSignOut() {
     navigate("/account/login", {
@@ -29,14 +33,21 @@ export function NavBar() {
             <NavDropdown title="Project" id="basic-nav-dropdown">
               <NavDropdown.Item
                 as={Link}
-                to={"/project/save"}
+                to={"/project/create"}
+                state = {{
+                  token: token,
+                }}
               >
-                Save
+                Create
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item
                 as={Link}
                 to={"/project/list"}
+                state = {{
+                  token: token,
+                  accountId: accountId
+                }}
               >
                 List
               </NavDropdown.Item>

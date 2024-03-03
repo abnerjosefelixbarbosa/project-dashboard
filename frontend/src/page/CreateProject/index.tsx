@@ -1,25 +1,26 @@
-import "./index.css";
 import { NavBar } from "../../components/Navbar";
-import { List } from "./List";
 import { useLocation, useNavigate } from "react-router-dom";
+import "./index.css";
+import { FromCreate } from "./FormCreate";
 import { useEffect } from "react";
 
-export function ListProjects() {
+export function CreateProject() {
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
+    console.log(location.state)
     if (location.state === undefined) {
       navigate("/no-authentication", {
         replace: true,
       });
-    }
+    } 
   }, []);
-
+  
   return (
     <>
       <NavBar />
-      <List />
+      <FromCreate />
     </>
   );
 }

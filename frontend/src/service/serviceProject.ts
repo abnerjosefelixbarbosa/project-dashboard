@@ -1,47 +1,41 @@
+import { BadRequestError } from "../exception/badRequestError";
 import { Project } from "../types/project";
-import { supabase } from "./subabase";
+import { BASE_URL } from "../utils/request";
 
-export async function save(data: Project) {
-  if (data.end <= data.start) {
-    throw new Error("end date invalid");
-  }
-  const { error } = await supabase.from("project").insert({
-    id: crypto.randomUUID(),
-    name: data.name,
-    description: data.description,
-    start: data.start,
-    end: data.end,
-    budget: data.budget,
-    user_id: data.user_id,
+export async function createProject(data: any, token: string) {
+  const res = await fetch(`${BASE_URL}/api/projects/create`, {
+    method: "post",
+    headers: {
+      "content-type": "application/json",
+      "authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(data),
   });
-  if (error) throw error;
-}
-
-export async function getAllByUserId(userId: string) {
-  const { data, error } = await supabase
-    .from("project")
-    .select("*")
-    .eq("user_id", userId)
-    .order("name");
-  if (error) throw error;
-  return data;
-}
-
-export async function edit(data: Project) {
-  if (data.end <= data.start) {
-    throw new Error("end date invalid");
+  const json = await res.json();
+  if (json.message) {
+    throw new BadRequestError(json.message);
   }
-  const { error } = await supabase.from("project").update({
-    name: data.name,
-    description: data.description,
-    start: data.start,
-    end: data.end,
-    budget: data.budget,
-  }).eq("id", data.id);
-  if (error) throw error;
+  const obj: Project = { ...json }
+  return obj;
+}
+
+export async function listProjectsAllByAccountId(accountId: string, token: string) {
+  const res = await fetch(`${BASE_URL}/api/projects/list-all-by-account-id?accountId=${accountId}`, {
+    method: "get",
+    headers: {
+      "content-type": "application/json",
+      "authorization": `Bearer ${token}`
+    }
+  });
+  const json = await res.json();
+  const objs: Array<Project> = json.content;
+  return objs;
+}
+
+export async function edit(data: any) {
+  
 }
 
 export async function deleteById(id: string) {
-  const { error } = await supabase.from("project").delete().eq("id", id);
-  if (error) throw error;
+  
 }

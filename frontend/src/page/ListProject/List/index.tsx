@@ -1,27 +1,31 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Row, Table } from "react-bootstrap";
-import { deleteById, getAllByUserId } from "../../../service/serviceProject";
+import { listProjectsAllByAccountId } from "../../../service/serviceProject";
 import { Project } from "../../../types/project";
 import { ModalDetails } from "../ModalDetails";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import { ModalEdit } from "../ModalEdit";
-import { getUser } from "../../../service/auth";
+import { useLocation } from "react-router-dom";
 
 export function List() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const location = useLocation();
 
   useEffect(() => {
-    getUser()
-    .then((user) => {
-      return getAllByUserId(user!.id).then((projects) => projects)
-    }).then((projects) => {
-      setProjects(projects);
-    })
+    handleListProject();
   }, [loading]);
 
+  async function handleListProject() {
+    const token = location.state.token;
+    const accountId = location.state.accountId;
+    const res = await listProjectsAllByAccountId(accountId, token);
+    setProjects(res);
+  }
+
   function handleRemove(id: string) {
+    /*
     setLoading(false)
     deleteById(id)
       .then(() => {
@@ -36,6 +40,7 @@ export function List() {
       .finally(() => {
         setLoading(true)
       });
+      */
   }
 
   return (

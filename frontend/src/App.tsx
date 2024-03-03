@@ -4,7 +4,7 @@ import { Home } from "./page/Home";
 import { About } from "./page/About";
 import { LoginAccount } from "./page/LoginAccount";
 import { ListProjects } from "./page/ListProject";
-import { SaveProject } from "./page/SaveProject";
+import { CreateProject } from "./page/CreateProject";
 import { NoAuthentication } from "./page/NoAuthentication";
 import { CreateAccount } from "./page/CreateAccount";
 
@@ -22,7 +22,7 @@ export function App() {
             </Route>
             <Route path="/project">
               <Route path="list" element={<ListProjects />} />
-              <Route path="save" element={<SaveProject />} />
+              <Route path="create" element={<CreateProject />} />
             </Route>
             <Route path="/no-authentication" element={<NoAuthentication />} />
           </Route>

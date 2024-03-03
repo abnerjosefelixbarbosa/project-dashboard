@@ -2,12 +2,11 @@ import { Button, Container, Form, Row } from "react-bootstrap";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { save } from "../../../service/serviceProject";
+import { } from "../../../service/serviceProject";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
-import { getUser } from "../../../service/auth";
 
 const schema = z.object({
   name: z
@@ -31,7 +30,7 @@ const schema = z.object({
 
 type FormSave = z.infer<typeof schema>;
 
-export function FromSave() {
+export function FromCreate() {
   const {
     register,
     handleSubmit,
@@ -45,14 +44,10 @@ export function FromSave() {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    getUser().then((value) => {
-      if (value !== null) {
-        setUser(value);
-      } 
-    })
   }, []);
 
   function handleSave(data: FormSave) {
+    /*
     save({ ...data, user_id: `${user?.id}`, id: "" })
       .then(() => {
         toast.success("project saved", {
@@ -67,6 +62,7 @@ export function FromSave() {
           toast.error(e.message);
         }
       });
+      */
   }
 
   return (
