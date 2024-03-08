@@ -64,8 +64,5 @@ public class ProjectService implements IProject {
         if (project.getBudget().doubleValue() == 0.00) {
         	throw new BusinessException("Budget equal 0.00");
         }
-        if (project.getBudget().scale() != 2) {
-        	throw new BusinessException("Budget different from scale 2");
-        }
 	}
 }

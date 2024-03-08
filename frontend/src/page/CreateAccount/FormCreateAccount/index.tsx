@@ -11,22 +11,17 @@ import "react-toastify/ReactToastify.css";
 const regex = RegExp("^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$");
 const date = new Date();
 const schema = z.object({
-  nameUser: z
-    .string()
+  nameUser: z.string()
     .nonempty("Name user empty")
     .max(100, "max 100"),
-  emailUser: z
-    .string()
+  emailUser: z.string()
     .nonempty("Email user empty")
     .email("Email user invalid"),
-  passwordUser: z
-    .string()
+  passwordUser: z.string()
     .nonempty("Password user empty")
     .regex(regex, "Password user invalid")
     .max(20, "Passowrd user max 20"),
-  dateBirthUser: z
-    .coerce
-    .date()
+  dateBirthUser: z.coerce.date()
     .max(date, "Date birth user past"),
 });
 

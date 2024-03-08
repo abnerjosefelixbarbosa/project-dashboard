@@ -1,19 +1,17 @@
 import "./index.css";
 import { NavBar } from "../../components/Navbar";
 import { List } from "./List";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 
 export function ListProjects() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [params] = useSearchParams();
+  const token = params.get('token');
+  const accountId = params.get('accountId');
 
   useEffect(() => {
-    if (location.state === undefined) {
-      navigate("/no-authentication", {
-        replace: true,
-      });
-    }
+    //console.log(token);
+    //console.log(accountId);
   }, []);
 
   return (

@@ -5,7 +5,7 @@ import { User } from "../entities/user";
 import { BadRequestError } from "../exception/badRequestError";
 import { BASE_URL } from "../utils/request";
 
-type LoginResponse = {
+type ObjLoginAccountResponse = {
   id: string,
 	dateCreation: Date,
 	level: Level,
@@ -13,7 +13,19 @@ type LoginResponse = {
   token: string
 }
 
-export async function loginAccount(data: any) {
+export type ObjLoginAccount = {
+  emailUser: string,
+  passwordUser: string
+}
+
+export type ObjCreateAccount = {
+  nameUser: string,
+  emailUser: string,
+  passwordUser: string,
+  dateBirthUser: Date
+}
+
+export async function loginAccount(data: ObjLoginAccount) {
   const res = await fetch(`${BASE_URL}/api/accounts/login`, {
     method: "post",
     headers: {
@@ -25,11 +37,11 @@ export async function loginAccount(data: any) {
   if (json.message) {
     throw new BadRequestError(json.message);
   }
-  const obj: LoginResponse = { ...json }
+  const obj: ObjLoginAccountResponse = { ...json }
   return obj;
 }
 
-export async function createAccount(data: any) {
+export async function createAccount(data: ObjCreateAccount) {
   const res = await fetch(`${BASE_URL}/api/accounts/create`, {
     method: "post",
     headers: {

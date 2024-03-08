@@ -9,7 +9,6 @@ export function CreateProject() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(location.state)
     if (location.state === undefined) {
       navigate("/no-authentication", {
         replace: true,

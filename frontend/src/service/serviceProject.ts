@@ -1,8 +1,17 @@
+import { Project } from "../entities/project";
 import { BadRequestError } from "../exception/badRequestError";
-import { Project } from "../types/project";
 import { BASE_URL } from "../utils/request";
 
-export async function createProject(data: any, token: string) {
+export type ObjCreateProject = {
+  name: string;
+  description: string;
+  dateStart: Date;
+  dateEnd: Date;
+  budget: number;
+  accountId: string;
+};
+
+export async function createProject(data: ObjCreateProject, token: string) {
   const res = await fetch(`${BASE_URL}/api/projects/create`, {
     method: "post",
     headers: {
@@ -23,19 +32,22 @@ export async function listProjectsAllByAccountId(accountId: string, token: strin
   const res = await fetch(`${BASE_URL}/api/projects/list-all-by-account-id?accountId=${accountId}`, {
     method: "get",
     headers: {
-      "content-type": "application/json",
       "authorization": `Bearer ${token}`
     }
   });
   const json = await res.json();
+  if (json.message) {
+    throw new BadRequestError(json.message);
+  }
   const objs: Array<Project> = json.content;
   return objs;
 }
 
-export async function edit(data: any) {
-  
-}
-
-export async function deleteById(id: string) {
-  
+export async function deleteProjectById(id: string, token: string) {
+  await fetch(`${BASE_URL}/api/projects/delete-by-id?id=${id}`, {
+    method: "delete",
+    headers: {
+      "authorization": `Bearer ${token}`
+    }
+  });
 }

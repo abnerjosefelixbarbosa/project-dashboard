@@ -2,33 +2,28 @@ import { Button, Container, Form, Row } from "react-bootstrap";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { } from "../../../service/serviceProject";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
-import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ObjCreateProject, createProject } from "../../../service/serviceProject";
+import { ValidationFormError } from "../../../exception/validationFormError";
 
+const date = new Date();
 const schema = z.object({
-  name: z
-    .string()
-    .min(1, "min 1 character")
-    .max(100, "max 100 characters"),
+  name: z.string()
+    .nonempty("Name empty")
+    .max(100, "Name max 100"),
   description: z
     .string()
-    .min(1, "min 1 character")
-    .max(200, "max 200 character"),
-  start: z.coerce.date()
-    .min(new Date(), "min future date"),
-  end: z
-    .coerce
-    .date()
-    .min(new Date(), "min future date"),
-  budget: z
-    .coerce
-    .number(),
+    .nonempty("Description empty")
+    .max(200, "Description max 200"),
+  dateStart: z.coerce.date()
+    .min(date, "Date start future"),
+  dateEnd: z.coerce.date(),
+  budget: z.coerce.number(),
 });
 
-type FormSave = z.infer<typeof schema>;
+type FormCreate = z.infer<typeof schema>;
 
 export function FromCreate() {
   const {
@@ -36,33 +31,60 @@ export function FromCreate() {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<FormSave>({
+  } = useForm<FormCreate>({
     mode: "all",
     reValidateMode: "onSubmit",
     resolver: zodResolver(schema),
   });
-  const [user, setUser] = useState<User>();
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const token = params.get('token');
+  const accountId = params.get('accountId');
 
-  useEffect(() => {
-  }, []);
-
-  function handleSave(data: FormSave) {
-    /*
-    save({ ...data, user_id: `${user?.id}`, id: "" })
-      .then(() => {
-        toast.success("project saved", {
-          autoClose: 2000,
-          position: "top-center",
+  async function handleCreate(data: FormCreate) {
+    try {
+      data.dateStart.setDate(data.dateStart.getDate() + 1);
+      data.dateEnd.setDate(data.dateEnd.getDate() + 1);
+      validateForm(data);
+      const obj: ObjCreateProject = {
+        accountId: accountId!,
+        ...data
+      }
+      const res = await createProject(obj, token!);
+      if (res.id) {
+        navigate(`/project/list?token=${token}&accountId=${accountId}`, {
+          replace: true,
         });
-      })
-      .catch((e) => {
-        if (e.message.includes("end date")) {
-          setError("end", { message: e.message });
-        } else if (e.message) {
-          toast.error(e.message);
-        }
-      });
-      */
+      }
+    } catch (e: any) {
+      const message = `${e.message}`;
+      if (message.includes("Date start future")) {
+        setError("dateStart", { message: message });
+      } else if (message.includes("Date end equal date start")) {
+        setError("dateEnd", { message: message });
+      } else if (message.includes("Date end before date start")) {
+        setError("dateEnd", { message: e.message });
+      } else if (message.includes("Budget equal 0.00")) {
+        setError("budget", { message: message });
+      } else {
+        toast.error(message);
+      }
+    }
+  }
+
+  function validateForm(data: FormCreate) {
+    if (data.dateStart.toDateString() == date.toDateString()) {
+      throw new ValidationFormError("Date start future");
+    }
+    if (data.dateEnd.toDateString() == data.dateStart.toDateString()) {
+      throw new ValidationFormError("Date end equal date start");
+    }
+    if (data.dateEnd.getTime() < data.dateStart.getTime()) {
+      throw new ValidationFormError("Date end before date start");
+    }
+    if (data.budget == 0) {
+      throw new ValidationFormError("Budget equal 0.00");
+    }
   }
 
   return (
@@ -70,14 +92,10 @@ export function FromCreate() {
       <ToastContainer />
       <Container className="container_project_save_form">
         <Row>
-          <Form onSubmit={handleSubmit(handleSave)}>
+          <Form onSubmit={handleSubmit(handleCreate)}>
             <Form.Group className="mb-3">
               <Form.Label>Name:</Form.Label>
-              <Form.Control
-                {...register("name")}
-                type="text"
-                placeholder="Enter name"
-              />
+              <Form.Control {...register("name")} type="text" />
               <Form.Text className="text_color">
                 {errors.name?.message}
               </Form.Text>
@@ -87,7 +105,6 @@ export function FromCreate() {
               <Form.Control
                 {...register("description")}
                 as="textarea"
-                placeholder="Enter description"
                 style={{ height: "100px" }}
               />
               <Form.Text className="text_color">
@@ -95,17 +112,17 @@ export function FromCreate() {
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Start:</Form.Label>
-              <Form.Control {...register("start")} type="date" />
+              <Form.Label>Date start:</Form.Label>
+              <Form.Control {...register("dateStart")} type="date" />
               <Form.Text className="text_color">
-                {errors.start?.message}
+                {errors.dateStart?.message}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>End:</Form.Label>
-              <Form.Control {...register("end")} type="date" />
+              <Form.Label>Date end:</Form.Label>
+              <Form.Control {...register("dateEnd")} type="date" />
               <Form.Text className="text_color">
-                {errors.end?.message}
+                {errors.dateEnd?.message}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
@@ -113,7 +130,6 @@ export function FromCreate() {
               <Form.Control
                 {...register("budget")}
                 type="text"
-                placeholder="Enter budget"
                 onChange={(e) => {
                   let value = e.target.value;
                   value = value.replace(/(\D)/g, "");
@@ -127,7 +143,7 @@ export function FromCreate() {
             </Form.Group>
             <div className="d-grid gap-2">
               <Button variant="primary" type="submit" size="lg">
-                Save
+                Create
               </Button>
             </div>
           </Form>

@@ -12,8 +12,7 @@ const schema = z.object({
   emailUser: z.string()
     .nonempty("Email empty")
     .email("Email invalid"),
-  passwordUser: z
-    .string()
+  passwordUser: z.string()
     .nonempty("Password empty")
     .regex(regex, "Password invalid")
     .max(20, "Passowrd max 20"),
@@ -36,13 +35,9 @@ export function FormLogin() {
   async function handleLogin(data: FormLogin) {
     try {
       const res = await loginAccount(data);
-      navigate("/project/list", {
-        replace: true,
-        state: {
-          token: res.token,
-          accountId: res.id
-        }
-      })
+      navigate(`/project/list?token=${res.token}&accountId=${res.id}`, {
+        replace: true
+      });
     } catch (e: any) {
       const message = `${e.message}`;
       toast.error(message);

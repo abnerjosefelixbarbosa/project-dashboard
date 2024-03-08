@@ -3,41 +3,44 @@ import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { edit } from "../../../service/serviceProject";
+import { } from "../../../service/serviceProject";
 import "react-toastify/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 
 const schema = z.object({
-  name: z.string().max(100, "max 100 characters").nonempty("name empty"),
-  description: z
-    .string()
+  name: z.string()
+    .max(100, "max 100 characters")
+    .nonempty("name empty"),
+  description: z.string()
     .max(200, "max 200 character")
     .nonempty("description empty"),
-  start: z.coerce.date().min(new Date(), "min future date"),
-  end: z.coerce.date().min(new Date(), "min future date"),
+  start: z.coerce.date()
+    .min(new Date(), "min future date"),
+  end: z.coerce.date()
+    .min(new Date(), "min future date"),
   budget: z.coerce.number(),
 });
 
 type FormEdit = z.infer<typeof schema>;
 
-interface ModalData {
+type ModalData = {
   id: string;
   name: string;
   description: string;
-  start: Date;
-  end: Date;
+  dateStart: Date;
+  dateEnd: Date;
   budget: number;
-  userId: string;
+  accountId: string;
 }
 
 export function ModalEdit({
   id,
   name,
   description,
-  start,
-  end,
+  dateStart,
+  dateEnd,
   budget,
-  userId
+  accountId
 }: ModalData) {
   const [show, setShow] = useState<boolean>(false);
   const {
@@ -50,39 +53,19 @@ export function ModalEdit({
     reValidateMode: "onSubmit",
     resolver: zodResolver(schema),
   });
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   function handleEdit(data: FormEdit) {
-    edit({ ...data, id: id, user_id: userId })
-      .then(() => {
-        handleClose();
-        toast.success("project edited", {
-          position: "top-center",
-          autoClose: 2000
-        });
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
-      })
-      .catch((e) => {
-        if (e.message.includes("end date")) {
-          setError("end", { message: e.message });
-        } else if (e.message) {
-          toast.error(e.message);
-        }
-      });
+    
   }
 
   return (
     <>
       <ToastContainer />
-
       <Button variant="primary" onClick={handleShow}>
         Edit
       </Button>
-
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit</Modal.Title>
@@ -119,7 +102,7 @@ export function ModalEdit({
               <Form.Control
                 {...register("start")}
                 type="date"
-                defaultValue={start.toString()}
+                defaultValue={dateStart.toString()}
               />
               <Form.Text className="text_color">
                 {errors.start?.message}
@@ -130,7 +113,7 @@ export function ModalEdit({
               <Form.Control
                 {...register("end")}
                 type="date"
-                defaultValue={end.toString()}
+                defaultValue={dateEnd.toString()}
               />
               <Form.Text className="text_color">
                 {errors.end?.message}
