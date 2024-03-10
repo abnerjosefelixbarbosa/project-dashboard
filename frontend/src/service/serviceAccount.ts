@@ -18,13 +18,6 @@ type ObjLoginAccount = {
   passwordUser: string
 }
 
-type ObjCreateAccount = {
-  nameUser: string,
-  emailUser: string,
-  passwordUser: string,
-  dateBirthUser: Date
-}
-
 export async function loginAccount(data: ObjLoginAccount) {
   const res = await fetch(`${BASE_URL}/api/accounts/login`, {
     method: "POST",
@@ -39,6 +32,13 @@ export async function loginAccount(data: ObjLoginAccount) {
   }
   const obj: ObjLoginAccountResponse = { ...json }
   return obj;
+}
+
+type ObjCreateAccount = {
+  nameUser: string,
+  emailUser: string,
+  passwordUser: string,
+  dateBirthUser: Date
 }
 
 export async function createAccount(data: ObjCreateAccount) {

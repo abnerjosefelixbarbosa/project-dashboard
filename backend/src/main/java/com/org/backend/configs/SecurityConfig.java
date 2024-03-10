@@ -33,17 +33,22 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		return http.csrf((csrf) -> csrf.disable()).headers((header) -> {
+		return http.csrf((csrf) -> csrf.disable())
+		.headers((header) -> {
 			header.frameOptions((frame) -> {
 				frame.sameOrigin();
 			});
-		}).cors(Customizer.withDefaults()).authorizeHttpRequests((auth) -> {
+		})
+		.cors(Customizer.withDefaults()).authorizeHttpRequests((auth) -> {
 			auth.requestMatchers(AUTH_WHITELIST).permitAll();
-			auth.anyRequest().permitAll();
-		}).sessionManagement((session) -> {
+			auth.anyRequest().authenticated();
+		})
+		.sessionManagement((session) -> {
 			session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		}).httpBasic(Customizer.withDefaults())
-				.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
+		})
+		.httpBasic(Customizer.withDefaults())
+	    .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+	    .build();
 	}
 
 	@Bean
@@ -69,9 +74,14 @@ public class SecurityConfig {
 		return auth.getAuthenticationManager();
 	}
 
-	private static final AntPathRequestMatcher[] AUTH_WHITELIST = { AntPathRequestMatcher.antMatcher("/h2-console/**"),
-			AntPathRequestMatcher.antMatcher("/v1/auth/**"), AntPathRequestMatcher.antMatcher("/v3/api-docs/**"),
-			AntPathRequestMatcher.antMatcher("/v3/api-docs.yaml"), AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
-			AntPathRequestMatcher.antMatcher("/swagger-ui.html"), AntPathRequestMatcher.antMatcher("/api/accounts/create"),
-			AntPathRequestMatcher.antMatcher("/api/accounts/login") };
+	private static final AntPathRequestMatcher[] AUTH_WHITELIST = { 
+			AntPathRequestMatcher.antMatcher("/h2-console/**"),
+			AntPathRequestMatcher.antMatcher("/v1/auth/**"),
+			AntPathRequestMatcher.antMatcher("/v3/api-docs/**"),
+			AntPathRequestMatcher.antMatcher("/v3/api-docs.yaml"),
+			AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
+			AntPathRequestMatcher.antMatcher("/swagger-ui.html"),
+			AntPathRequestMatcher.antMatcher("/api/accounts/create"),
+			AntPathRequestMatcher.antMatcher("/api/accounts/login")
+	};
 }

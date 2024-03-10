@@ -21,8 +21,7 @@ const schema = z.object({
     .nonempty("Password user empty")
     .regex(regex, "Password user invalid")
     .max(20, "Passowrd user max 20"),
-  dateBirthUser: z.coerce.date()
-    .max(date, "Date birth user past"),
+  dateBirthUser: z.coerce.date(),
 });
 
 type FormCreateAccount = z.infer<typeof schema>;
@@ -42,7 +41,7 @@ export function FormCreateAccount() {
 
   async function handleCreate(data: FormCreateAccount) {
     try {
-      data.dateBirthUser.setDate(data.dateBirthUser.getDate() + 1);
+      data.dateBirthUser = transformeDate(data.dateBirthUser);
       validateForm(data);
       const res = await createAccount(data);
       if (res.id !== undefined) {
@@ -60,8 +59,16 @@ export function FormCreateAccount() {
     }
   }
 
+  function transformeDate(data: Date) {
+    data.setDate(data.getDate() + 1);
+    data.setHours(date.getHours());
+    data.setMinutes(date.getMinutes());
+    data.setSeconds(date.getSeconds());
+    return data;
+  }
+
   function validateForm(data: FormCreateAccount) {
-    if (data.dateBirthUser.toDateString() == date.toDateString()) {
+    if (data.dateBirthUser > date || data.dateBirthUser.toDateString() == date.toDateString()) {
       throw new ValidationFormError("Date birth user past");
     }
   }

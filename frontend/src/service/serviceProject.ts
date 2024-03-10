@@ -21,12 +21,12 @@ export async function createProject(data: ObjCreateProject, token: string) {
     },
     body: JSON.stringify(data),
   });
+  if (res.status == 401) {
+    throw new NotAuthorizedError("User not authorized");
+  }
   const json = await res.json();
   if (json.message) {
     throw new BadRequestError(json.message);
-  }
-  if (res.status === 401) {
-    throw new NotAuthorizedError("User not authorized");
   }
   const obj: Project = { ...json }
   return obj;
@@ -39,12 +39,12 @@ export async function listProjectsAllByAccountId(accountId: string, token: strin
       "authorization": `Bearer ${token}`
     }
   });
+  if (res.status == 401) {
+    throw new NotAuthorizedError("User not authorized");
+  }
   const json = await res.json();
   if (json.message) {
     throw new BadRequestError(json.message);
-  }
-  if (res.status === 401) {
-    throw new NotAuthorizedError("User not authorized");
   }
   const objs: Array<Project> = json.content;
   return objs;
@@ -57,7 +57,7 @@ export async function deleteProjectById(id: string, token: string) {
       "authorization": `Bearer ${token}`
     }
   });
-  if (res.status === 401) {
+  if (res.status == 401) {
     throw new NotAuthorizedError("User not authorized");
   }
 }
@@ -79,10 +79,10 @@ export async function updateProjectById(id: string, token: string, data: ObjUpda
     },
     body: JSON.stringify(data)
   });
-  const json = await res.json();
   if (res.status === 401) {
     throw new NotAuthorizedError("User not authorized");
   }
+  const json = await res.json();
   const obj: Project = { ...json }
   return obj;
 }

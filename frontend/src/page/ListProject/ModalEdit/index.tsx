@@ -79,6 +79,8 @@ export function ModalEdit({
         setError("dateEnd", { message: message });
       } else if (message.includes("Date end before date start")) {
         setError("dateEnd", { message: message });
+      } else if (message.includes("Budget equal 0.00")) {
+        setError("budget", { message: message });
       } else {
         toast.error(message);
       }
@@ -94,14 +96,17 @@ export function ModalEdit({
   }
 
   function validateForm(data: FormEdit) {
-    if (data.dateStart.getTime() <= date.getTime()) {
+    if (data.dateStart < date || data.dateStart.toDateString() == date.toDateString()) {
       throw new ValidationFormError("Date start future");
     }
-    if (data.dateEnd.getTime() == data.dateStart.getTime()) {
+    if (data.dateEnd.toDateString() == data.dateStart.toDateString()) {
       throw new ValidationFormError("Date end equal date start");
     }
-    if (data.dateEnd.getTime() < data.dateStart.getTime()) {
+    if (data.dateEnd < data.dateStart) {
       throw new ValidationFormError("Date end before date start");
+    }
+    if (data.budget == 0) {
+      throw new ValidationFormError("Budget equal 0.00");
     }
   }
 

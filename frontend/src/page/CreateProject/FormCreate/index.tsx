@@ -17,8 +17,7 @@ const schema = z.object({
     .string()
     .nonempty("Description empty")
     .max(200, "Description max 200"),
-  dateStart: z.coerce.date()
-    .min(date, "Date start future"),
+  dateStart: z.coerce.date(),
   dateEnd: z.coerce.date(),
   budget: z.coerce.number(),
 });
@@ -43,8 +42,8 @@ export function FromCreate() {
 
   async function handleCreate(data: FormCreate) {
     try {
-      data.dateStart.setDate(data.dateStart.getDate() + 1);
-      data.dateEnd.setDate(data.dateEnd.getDate() + 1);
+      data.dateStart = transformeDate(data.dateStart);
+      data.dateEnd = transformeDate(data.dateEnd);
       validateForm(data);
       const obj = {
         accountId: accountId!,
@@ -72,14 +71,22 @@ export function FromCreate() {
     }
   }
 
+  function transformeDate(data: Date) {
+    data.setDate(data.getDate() + 1);
+    data.setHours(date.getHours());
+    data.setMinutes(date.getMinutes());
+    data.setSeconds(date.getSeconds());
+    return data;
+  }
+
   function validateForm(data: FormCreate) {
-    if (data.dateStart.toDateString() == date.toDateString()) {
+    if (data.dateStart < date || data.dateStart.toDateString() == date.toDateString()) {
       throw new ValidationFormError("Date start future");
     }
     if (data.dateEnd.toDateString() == data.dateStart.toDateString()) {
       throw new ValidationFormError("Date end equal date start");
     }
-    if (data.dateEnd.getTime() < data.dateStart.getTime()) {
+    if (data.dateEnd < data.dateStart) {
       throw new ValidationFormError("Date end before date start");
     }
     if (data.budget == 0) {
