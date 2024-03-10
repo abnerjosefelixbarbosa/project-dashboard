@@ -13,12 +13,12 @@ type ObjLoginAccountResponse = {
   token: string
 }
 
-export type ObjLoginAccount = {
+type ObjLoginAccount = {
   emailUser: string,
   passwordUser: string
 }
 
-export type ObjCreateAccount = {
+type ObjCreateAccount = {
   nameUser: string,
   emailUser: string,
   passwordUser: string,
@@ -27,7 +27,7 @@ export type ObjCreateAccount = {
 
 export async function loginAccount(data: ObjLoginAccount) {
   const res = await fetch(`${BASE_URL}/api/accounts/login`, {
-    method: "post",
+    method: "POST",
     headers: {
       "content-type": "application/json",
     },
@@ -43,7 +43,7 @@ export async function loginAccount(data: ObjLoginAccount) {
 
 export async function createAccount(data: ObjCreateAccount) {
   const res = await fetch(`${BASE_URL}/api/accounts/create`, {
-    method: "post",
+    method: "POST",
     headers: {
       "content-type": "application/json",
     },

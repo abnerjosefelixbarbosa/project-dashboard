@@ -3,21 +3,22 @@ import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { } from "../../../service/serviceProject";
+import { updateProjectById } from "../../../service/serviceProject";
 import "react-toastify/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import { ValidationFormError } from "../../../exception/validationFormError";
+import { useSearchParams } from "react-router-dom";
 
+const date = new Date();
 const schema = z.object({
   name: z.string()
-    .max(100, "max 100 characters")
-    .nonempty("name empty"),
+    .max(100, "Name max 100")
+    .nonempty("Name empty"),
   description: z.string()
-    .max(200, "max 200 character")
-    .nonempty("description empty"),
-  start: z.coerce.date()
-    .min(new Date(), "min future date"),
-  end: z.coerce.date()
-    .min(new Date(), "min future date"),
+    .max(200, "Description max 200")
+    .nonempty("Description empty"),
+  dateStart: z.coerce.date(),
+  dateEnd: z.coerce.date(),
   budget: z.coerce.number(),
 });
 
@@ -39,8 +40,7 @@ export function ModalEdit({
   description,
   dateStart,
   dateEnd,
-  budget,
-  accountId
+  budget
 }: ModalData) {
   const [show, setShow] = useState<boolean>(false);
   const {
@@ -55,9 +55,54 @@ export function ModalEdit({
   });
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [params] = useSearchParams();
+  const token = params.get('token')!;
 
-  function handleEdit(data: FormEdit) {
-    
+  async function handleEdit(data: FormEdit) {
+    try {
+      data.dateStart = transformeDate(data.dateStart);
+      data.dateEnd = transformeDate(data.dateEnd);
+      validateForm(data);
+      const obj = {
+        ...data,
+      }
+      const res = await updateProjectById(id, token, obj);
+      if (res.id !== undefined) {
+        setShow(false);
+        window.location.reload();
+      }
+    } catch (e: any) {
+      const message = `${e.message}`;
+      if (message.includes("Date start future")) {
+        setError("dateStart", { message: message });
+      } else if (message.includes("Date end equal date start")) {
+        setError("dateEnd", { message: message });
+      } else if (message.includes("Date end before date start")) {
+        setError("dateEnd", { message: message });
+      } else {
+        toast.error(message);
+      }
+    }
+  }
+
+  function transformeDate(data: Date) {
+    data.setDate(data.getDate() + 1);
+    data.setHours(date.getHours());
+    data.setMinutes(date.getMinutes());
+    data.setSeconds(date.getSeconds());
+    return data;
+  }
+
+  function validateForm(data: FormEdit) {
+    if (data.dateStart.getTime() <= date.getTime()) {
+      throw new ValidationFormError("Date start future");
+    }
+    if (data.dateEnd.getTime() == data.dateStart.getTime()) {
+      throw new ValidationFormError("Date end equal date start");
+    }
+    if (data.dateEnd.getTime() < data.dateStart.getTime()) {
+      throw new ValidationFormError("Date end before date start");
+    }
   }
 
   return (
@@ -77,7 +122,6 @@ export function ModalEdit({
               <Form.Control
                 {...register("name")}
                 type="text"
-                placeholder="Enter name"
                 defaultValue={name}
               />
               <Form.Text className="text_color">
@@ -89,7 +133,6 @@ export function ModalEdit({
               <Form.Control
                 {...register("description")}
                 as="textarea"
-                placeholder="Enter description"
                 style={{ height: "100px" }}
                 defaultValue={description}
               />
@@ -100,23 +143,23 @@ export function ModalEdit({
             <Form.Group className="mb-3">
               <Form.Label>Start:</Form.Label>
               <Form.Control
-                {...register("start")}
+                {...register("dateStart")}
                 type="date"
                 defaultValue={dateStart.toString()}
               />
               <Form.Text className="text_color">
-                {errors.start?.message}
+                {errors.dateStart?.message}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>End:</Form.Label>
               <Form.Control
-                {...register("end")}
+                {...register("dateEnd")}
                 type="date"
                 defaultValue={dateEnd.toString()}
               />
               <Form.Text className="text_color">
-                {errors.end?.message}
+                {errors.dateEnd?.message}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
@@ -124,7 +167,6 @@ export function ModalEdit({
               <Form.Control
                 {...register("budget")}
                 type="text"
-                placeholder="Enter budget"
                 onChange={(e) => {
                   let value = e.target.value;
                   value = value.replace(/(\D)/g, "");

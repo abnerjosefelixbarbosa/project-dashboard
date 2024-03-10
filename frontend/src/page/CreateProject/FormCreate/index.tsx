@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ObjCreateProject, createProject } from "../../../service/serviceProject";
+import { createProject } from "../../../service/serviceProject";
 import { ValidationFormError } from "../../../exception/validationFormError";
 
 const date = new Date();
@@ -38,19 +38,19 @@ export function FromCreate() {
   });
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const token = params.get('token');
-  const accountId = params.get('accountId');
+  const token = params.get('token')!;
+  const accountId = params.get('accountId')!;
 
   async function handleCreate(data: FormCreate) {
     try {
       data.dateStart.setDate(data.dateStart.getDate() + 1);
       data.dateEnd.setDate(data.dateEnd.getDate() + 1);
       validateForm(data);
-      const obj: ObjCreateProject = {
+      const obj = {
         accountId: accountId!,
         ...data
       }
-      const res = await createProject(obj, token!);
+      const res = await createProject(obj, token);
       if (res.id) {
         navigate(`/project/list?token=${token}&accountId=${accountId}`, {
           replace: true,

@@ -29,13 +29,15 @@ export function List() {
     }
   }
 
-  function handleRemove(id: string) {
-    setLoading(false);
-    deleteProjectById(id, token).then(() => {
+  async function handleRemove(id: string) {
+    try {
+      setLoading(false);
+      await deleteProjectById(id, token);
       setLoading(true);
-    }).catch((e) => {
-      toast.error(e.message);
-    });
+    } catch (e: any) {
+      const message = `${e.message}`;
+      toast.error(message);
+    }
   }
 
   return (
@@ -47,8 +49,8 @@ export function List() {
             <thead>
               <tr>
                 <th>name</th>
-                <th>start</th>
-                <th>end</th>
+                <th>date start</th>
+                <th>date end</th>
                 <th>budget</th>
               </tr>
             </thead>
