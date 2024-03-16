@@ -68,9 +68,11 @@ export function FormLogin() {
               <Button variant="primary" type="submit" size="lg">
                 Login
               </Button>
-              ou
               <Link to={"/account/create"}>
-                create account
+                Create account
+              </Link>
+              <Link to={"/send-email"}>
+                Forgot password? 
               </Link>
             </div>
           </Form>

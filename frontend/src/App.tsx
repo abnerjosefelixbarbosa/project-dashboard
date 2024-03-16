@@ -7,6 +7,7 @@ import { ListProjects } from "./page/ListProject";
 import { CreateProject } from "./page/CreateProject";
 import { NoAuthentication } from "./page/NoAuthentication";
 import { CreateAccount } from "./page/CreateAccount";
+import { SendEmail } from "./page/SendEmail";
 
 export function App() {
   return (
@@ -16,6 +17,7 @@ export function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/send-email" element={<SendEmail />} />
             <Route path="/account">
               <Route path="login" element={<LoginAccount />} />
               <Route path="create" element={<CreateAccount />} />

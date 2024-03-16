@@ -58,6 +58,12 @@ public class AccountService implements IAccount {
 			throw new NotFoundException("Account id not found");
 		});
 	}
+	
+	public Account findByUserEmail(String email) {
+		return accountRepository.findByUserEmail(email).orElseThrow(() -> {
+			throw new NotFoundException("Email not found");
+		});
+	}
 
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		return accountRepository.findByUserEmail(email).orElseThrow(() -> {

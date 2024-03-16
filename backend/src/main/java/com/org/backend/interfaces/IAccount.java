@@ -9,4 +9,5 @@ public interface IAccount extends UserDetailsService {
 	Account loginAccount(Account account);
 	Account updateAccountById(String id, Account account);
 	Account findAccountById(String id);
+	Account findByUserEmail(String email);
 }
