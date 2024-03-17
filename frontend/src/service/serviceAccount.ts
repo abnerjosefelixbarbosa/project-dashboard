@@ -56,3 +56,23 @@ export async function createAccount(data: ObjCreateAccount) {
   const obj: Account = { ...json }
   return obj;
 }
+
+type DataUpdatePassword = {
+  passwordUser: string
+}
+
+export async function updatePasswordAccount(email: string,data: DataUpdatePassword) {
+  const res = await fetch(`${BASE_URL}/api/accounts/update-password?email=${email}`, {
+    method: "PATCH",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  const json = await res.json();
+  if (json.message) {
+    throw new Error(json.message);
+  }
+  const obj: Account = { ...json }
+  return obj;
+}

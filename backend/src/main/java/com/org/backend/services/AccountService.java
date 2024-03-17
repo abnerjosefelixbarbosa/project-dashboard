@@ -1,7 +1,5 @@
 package com.org.backend.services;
 
-import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,15 +28,15 @@ public class AccountService implements IAccount {
 	public Account createAccount(Account account) {
 		validateAccount(account.getUser());
 		account.setLevel(Level.BASIC);
-		String encoder = crypt().encode(account.getPassword());
+		var encoder = crypt().encode(account.getPassword());
 		account.getUser().setPassword(encoder);
 		iUser.save(account.getUser());
 		return accountRepository.save(account);
 	}
 
 	public Account loginAccount(Account account) {
-		String userEmail = account.getUser().getEmail();
-		String userPassword = account.getUser().getPassword();
+		var userEmail = account.getUser().getEmail();
+		var userPassword = account.getUser().getPassword();
 		return accountRepository.findByUserEmailOrUserPassword(userEmail, userPassword).orElseThrow(() -> {
 			throw new NotFoundException("Email user or password user not found");
 		});
@@ -47,7 +45,7 @@ public class AccountService implements IAccount {
 	@Transactional
 	public Account updateAccountById(String id, Account account) {
 		validateAccount(account.getUser());
-		Account findAccountById = findAccountById(id);
+		var findAccountById = findAccountById(id);
 		findAccountById.update(account);
 		iUser.save(findAccountById.getUser());
 		return accountRepository.save(findAccountById);
@@ -71,11 +69,32 @@ public class AccountService implements IAccount {
 		});
 	}
 	
+	@Transactional
+	public Account updatePasswordByEmail(String email, Account account) {
+		validadePassword(account.getUser());
+		var findByUserEmail =  findByUserEmail(email);
+		findByUserEmail.updatePasswordByEmail(account);
+		var encoder = crypt().encode(findByUserEmail.getPassword());
+		findByUserEmail.getUser().setPassword(encoder);
+		iUser.save(findByUserEmail.getUser());
+		return accountRepository.save(findByUserEmail);
+	}
+	
+	private void validadePassword(User user) {
+		var stream = accountRepository.findAll().parallelStream();
+		stream.anyMatch((val) -> {
+			if (crypt().matches(user.getPassword(), val.getPassword())) {
+				throw new BusinessException("Password user exist");
+			}
+			return false;
+		});
+	}
+	
 	private void validateAccount(User user) {
 		if (accountRepository.existsByUserEmail(user.getEmail())) {
 			throw new BusinessException("Email user exist");
 		}
-		Stream<Account> stream = accountRepository.findAll().parallelStream();
+		var stream = accountRepository.findAll().parallelStream();
 		stream.anyMatch((val) -> {
 			if (crypt().matches(user.getPassword(), val.getPassword())) {
 				throw new BusinessException("Password user exist");

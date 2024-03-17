@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.org.backend.dtos.requests.CreateAccountRequest;
 import com.org.backend.dtos.requests.LoginAccountRequest;
 import com.org.backend.dtos.requests.UpdateAccountRequest;
+import com.org.backend.dtos.requests.UpdatePasswordRequest;
 import com.org.backend.dtos.responses.AccountResponse;
 import com.org.backend.dtos.responses.AccountResponseLogin;
 import com.org.backend.entities.Account;
@@ -40,17 +40,17 @@ public class AccountController {
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<AccountResponse> createAccount(@RequestBody @Valid CreateAccountRequest request) {
-		Account response = iAccount.createAccount(new Account(request));
+		var response = iAccount.createAccount(new Account(request));
 		return ResponseEntity.status(201).body(new AccountResponse(response));
 	}
 
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<AccountResponseLogin> loginAccount(@RequestBody @Valid LoginAccountRequest request) {
-		UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(request.emailUser(), request.passwordUser());
-		Authentication auth = authenticationManager.authenticate(user);
-		Account response = (Account) iAccount.loadUserByUsername(request.emailUser());
-		String token = iToken.generateToken((Account) auth.getPrincipal());
+		var user = new UsernamePasswordAuthenticationToken(request.emailUser(), request.passwordUser());
+		var auth = authenticationManager.authenticate(user);
+		var response = (Account) iAccount.loadUserByUsername(request.emailUser());
+		var token = iToken.generateToken((Account) auth.getPrincipal());
 		return ResponseEntity.status(200).body(new AccountResponseLogin(response, token));
 	}
 
@@ -61,7 +61,7 @@ public class AccountController {
 		if (id == null) {
 			throw new ValidationParamException("Param id null");
 		}
-		Account response = iAccount.updateAccountById(id, new Account(request));
+		var response = iAccount.updateAccountById(id, new Account(request));
 		return ResponseEntity.status(200).body(new AccountResponse(response));
 	}
 	
@@ -71,7 +71,19 @@ public class AccountController {
 		if (id == null) {
 			throw new ValidationParamException("Param id null");
 		}
-		Account response = iAccount.findAccountById(id);
+		var response = iAccount.findAccountById(id);
 		return ResponseEntity.status(200).body(new AccountResponse(response));
+	}
+	
+	@PatchMapping("/update-password")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<AccountResponse> updatePasswordByEmail(@RequestParam(required =  false) String email, 
+			@RequestBody @Valid UpdatePasswordRequest request) {
+		if (email == null) {
+			throw new ValidationParamException("Param email null");
+		}
+		var account = new Account(request);
+		account = iAccount.updatePasswordByEmail(email, account);
+		return ResponseEntity.status(200).body(new AccountResponse(account));
 	}
 }

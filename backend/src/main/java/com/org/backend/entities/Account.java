@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.org.backend.dtos.requests.CreateAccountRequest;
 import com.org.backend.dtos.requests.LoginAccountRequest;
 import com.org.backend.dtos.requests.UpdateAccountRequest;
+import com.org.backend.dtos.requests.UpdatePasswordRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -78,11 +79,21 @@ public class Account implements Serializable, UserDetails {
 		this.user = user;
 	}
 	
+	public Account(UpdatePasswordRequest request) {
+		User user = new User();
+		user.setPassword(request.passwordUser());
+		this.user = user;
+	}
+	
 	public void update(Account account) {
 		this.level = account.getLevel();
 		this.user.setDateBirth(account.getUser().getDateBirth());
 		this.user.setEmail(account.getUser().getEmail());
 		this.user.setName(account.getUser().getName());
+		this.user.setPassword(account.getUser().getPassword());
+	}
+	
+	public void updatePasswordByEmail(Account account) {
 		this.user.setPassword(account.getUser().getPassword());
 	}
 

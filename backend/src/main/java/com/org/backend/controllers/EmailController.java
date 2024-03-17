@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.org.backend.dtos.requests.EmailRequest;
-import com.org.backend.entities.Account;
 import com.org.backend.entities.Email;
 import com.org.backend.interfaces.IAccount;
 import com.org.backend.services.EmailService;
@@ -28,8 +27,8 @@ public class EmailController {
 	@PostMapping("/send")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void>  sendEmail(@RequestBody @Valid EmailRequest request) {
-		Email email = new Email(request);
-		Account account = iAccount.findByUserEmail(request.email());
+		var email = new Email(request);
+		iAccount.findByUserEmail(request.email());
 		email.setBody("test");
 		emailService.sendEmail(email);
 		return ResponseEntity.status(204).body(null);

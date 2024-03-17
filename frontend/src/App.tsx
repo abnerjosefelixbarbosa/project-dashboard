@@ -8,6 +8,7 @@ import { CreateProject } from "./page/CreateProject";
 import { NoAuthentication } from "./page/NoAuthentication";
 import { CreateAccount } from "./page/CreateAccount";
 import { SendEmail } from "./page/SendEmail";
+import { UpdatePassword } from "./page/UpdatePassword";
 
 export function App() {
   return (
@@ -18,6 +19,7 @@ export function App() {
             <Route index element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/send-email" element={<SendEmail />} />
+            <Route path="/update-password" element={<UpdatePassword />}/>
             <Route path="/account">
               <Route path="login" element={<LoginAccount />} />
               <Route path="create" element={<CreateAccount />} />

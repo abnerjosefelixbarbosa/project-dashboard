@@ -1,0 +1,8 @@
+.container_form {
+    border: #000 solid 1px;
+    border-radius: 10px;
+    width: 300px !important;
+    height: auto !important;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
