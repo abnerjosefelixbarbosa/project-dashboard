@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import { z } from "zod";
 import { updatePasswordAccount } from "../../../service/serviceAccount";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const regex = RegExp("^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$");
 const schema = z.object({
@@ -28,9 +28,10 @@ export function FormUpdate() {
     reValidateMode: "onSubmit",
     resolver: zodResolver(schema),
   });
-  //const [param] = useSearchParams();
-  //const email = param.get("email")!;
-  const email = "email1@gmail.com";
+  const [param] = useSearchParams();
+  const email = param.get("email")!;
+  const navigate = useNavigate();
+  //const email = "email1@gmail.com";
 
   async function handUpdate(data: FormUpdate) {
     try {
@@ -39,7 +40,7 @@ export function FormUpdate() {
         passwordUser: data.password,
       };
       await updatePasswordAccount(email, obj);
-      toast.success("Ok");
+      toast.success("password updated");
     } catch (e: any) {
       const message = `${e.message}`;
       if (message.includes("Password user exist")) {

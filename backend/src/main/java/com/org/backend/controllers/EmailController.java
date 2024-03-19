@@ -28,8 +28,19 @@ public class EmailController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void>  sendEmail(@RequestBody @Valid EmailRequest request) {
 		var email = new Email(request);
-		iAccount.findByUserEmail(request.email());
-		email.setBody("test");
+	    iAccount.findByUserEmail(request.email());
+	    var format = String.format(
+	    		"" +
+	    		"..." +
+	    		"\n" +		
+	            "click no link para alterar senha" +
+	            "\n" +
+	            "..." +
+	            "\n" +
+	    		"http://localhost:5173/update-password?email=%s" +
+	    	    ""			
+	    , request.email());
+		email.setBody(format);
 		emailService.sendEmail(email);
 		return ResponseEntity.status(204).body(null);
 	}
