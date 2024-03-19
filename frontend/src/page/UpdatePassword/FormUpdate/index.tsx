@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import { z } from "zod";
 import { updatePasswordAccount } from "../../../service/serviceAccount";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const regex = RegExp("^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$");
 const schema = z.object({
@@ -30,12 +30,9 @@ export function FormUpdate() {
   });
   const [param] = useSearchParams();
   const email = param.get("email")!;
-  const navigate = useNavigate();
-  //const email = "email1@gmail.com";
 
   async function handUpdate(data: FormUpdate) {
     try {
-      //console.log(email)
       const obj = {
         passwordUser: data.password,
       };
