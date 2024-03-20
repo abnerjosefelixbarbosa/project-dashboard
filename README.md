@@ -2,7 +2,7 @@
 
 # model
 
-![Model](https://www.notion.so/Project-Dashboard-87295bb40fe544e99e358bf5e8c397ad?pvs=4#f5e7332e9b7846888bb6ecd34128b1b1)
+![project-dashbord-diagram-class drawio](https://github.com/abnerjosefelixbarbosa/project-dashboard/assets/21656485/8ec513cc-51ba-4c3e-a36c-971a559d064d)
 
 # project technology
 
