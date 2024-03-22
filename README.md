@@ -1,14 +1,14 @@
 # project-dashboard 
 
-## about
+## sobre
 
 Este sistema tem por função gerênciar a criação de projetos básicos.
 
-## model
+## modelo
 
 ![project-dashbord-diagram-class drawio](https://github.com/abnerjosefelixbarbosa/project-dashboard/assets/21656485/8ec513cc-51ba-4c3e-a36c-971a559d064d)
 
-# project feature
+# recursos do projeto
 
 ## front-end
 
@@ -30,7 +30,7 @@ Este sistema tem por função gerênciar a criação de projetos básicos.
 - Lombok
 - Spring boot segurity
 
-# requirements
+# requisitos 
 
 ## functional
 
@@ -43,7 +43,7 @@ Este sistema tem por função gerênciar a criação de projetos básicos.
 - Usuário deve alterar projeto pelo id.
 - Usuário deve deletar projeto pelo id.
 
-## non functional
+## não functional
 
 - O desenvolvimento do sistema deve ser feito com Springboot Java com react.
 - O banco de dados para produção será H2 data base.
@@ -54,7 +54,7 @@ Este sistema tem por função gerênciar a criação de projetos básicos.
 - O tempo de resposta das requisições deve ser de menos de 10s.
 - O projeto será estruturado com SOLID.
 
-# project execution
+# execução do projeto 
 
 ```bash
 # clonar repositório
@@ -67,7 +67,7 @@ npm i
 npm run dev
 ```
 
-# author
+# autor 
 
 Abner José Felix Barbosa
 
