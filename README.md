@@ -30,9 +30,9 @@ Este sistema tem por função gerênciar a criação de projetos básicos.
 - Lombok
 - Spring boot segurity
 
-# Requirements
+# requirements
 
-## Functional
+## functional
 
 - Usuário deve criar conta.
 - Usuário deve  fazer Login na conta.
@@ -43,10 +43,10 @@ Este sistema tem por função gerênciar a criação de projetos básicos.
 - Usuário deve alterar projeto pelo id.
 - Usuário deve deletar projeto pelo id.
 
-## No functional
+## non functional
 
 - O desenvolvimento do sistema deve ser feito com Springboot Java com react.
-- O banco de dados para produção será PostgreSQL.
+- O banco de dados para produção será H2 data base.
 - As interfaces de usuário deve ser responsivas.
 - Os usuários só podem ter acesso aos seus projetos.
 - As senhas dos usuários deverão conter caráteres especiais e letra maiúscula.
@@ -67,8 +67,8 @@ npm i
 npm run dev
 ```
 
-# Autor
+# author
 
 Abner José Felix Barbosa
 
-Linkedin: https://www.linkedin.com/in/abner-jose-feliz-barbosa/
+linkedin: https://www.linkedin.com/in/abner-jose-feliz-barbosa/
