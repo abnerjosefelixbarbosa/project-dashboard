@@ -2,7 +2,7 @@
 
 ## sobre
 
-Este sistema tem por função gerênciar a criação de projetos básicos.
+Este sistema tem por função gerênciar a criação de projetos em um dashbord.
 
 ## modelo
 
