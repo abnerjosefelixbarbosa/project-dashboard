@@ -1,14 +1,14 @@
-# project-dashboard 
+# Project dashboard 
 
-## sobre
+## About
 
-Este sistema tem por função gerênciar a criação de projetos em um dashbord.
+Project dashboard
 
-## modelo
+## Model
 
 ![project-dashbord-diagram-class drawio](https://github.com/abnerjosefelixbarbosa/project-dashboard/assets/21656485/8ec513cc-51ba-4c3e-a36c-971a559d064d)
 
-## telas
+## Screens
 
 ![Captura de Tela (23)](https://github.com/abnerjosefelixbarbosa/cryptography/assets/21656485/df8ce7fa-982a-411e-8912-f9543dad2459)
 ![Captura de Tela (24)](https://github.com/abnerjosefelixbarbosa/cryptography/assets/21656485/7258a506-19d0-4058-93d5-0dc07e7599b8)
@@ -19,9 +19,9 @@ Este sistema tem por função gerênciar a criação de projetos em um dashbord.
 ![Captura de Tela (29)](https://github.com/abnerjosefelixbarbosa/cryptography/assets/21656485/87b7117b-c5ca-4a02-a9e9-9addee7dae9f)
 ![Captura de Tela (30)](https://github.com/abnerjosefelixbarbosa/cryptography/assets/21656485/46d41950-3180-4545-af07-0ea07d78cc28)
 
-# recursos do projeto
+# Project resource
 
-## front-end
+## Frontend
 
 - Typescript
 - React
@@ -30,45 +30,49 @@ Este sistema tem por função gerênciar a criação de projetos em um dashbord.
 - Bootstrap
 - Toastify
 
-## back-end
+## Backend
 
-- Java
+- Java 17
 - Spring boot
 - MVC
 - SOLID
 - H2 database
-- Swegger 3
+- Swegger
 - Lombok
 - Spring boot segurity
 
-# requisitos 
+# Requirements 
 
-## functional
+## Functional
 
-- Usuário deve criar conta.
-- Usuário deve  fazer Login na conta.
-- Sistema deve listar projeto pelo id da conta.
-- Sistema deve encontrar conta pelo id.
-- Usuário deve alterar conta pelo id.
-- Usuário deve criar projeto.
-- Usuário deve alterar projeto pelo id.
-- Usuário deve deletar projeto pelo id.
+- User must create account.
+- User must Login to the account.
+- System must list project by account ID.
+- System must find account by id.
+- User must change account by id.
+- User must create project.
+- User must change project by id.
+- User must delete project by id.
+  
+## Non functional
 
-## não functional
+- System development must be done with Springboot Java with react.
+- The database for development will be H2 data base.
+- User interfaces must be responsive.
+- Users can only have access to their projects.
+- User passwords must contain special characters and capital letters.
+- User passwords must have a maximum of 20 characters.
+- The response time for requests must be less than 10s.
+- The project will be structured with SOLID.
 
-- O desenvolvimento do sistema deve ser feito com Springboot Java com react.
-- O banco de dados para produção será H2 data base.
-- As interfaces de usuário deve ser responsivas.
-- Os usuários só podem ter acesso aos seus projetos.
-- As senhas dos usuários deverão conter caráteres especiais e letra maiúscula.
-- As senhas dos usuários deverão ter no máximo 20 caráteres.
-- O tempo de resposta das requisições deve ser de menos de 10s.
-- O projeto será estruturado com SOLID.
+# Project execution 
 
-# execução do projeto 
+- Copy the repository into an IDE.
+- Execute the project.
+- Access the [API document](http://localhost:8080/swagger-ui/index.html) or another tool to test the API.
 
 ```bash
-# clonar repositório
+# clone repository
 git clone https://github.com/abnerjosefelixbarbosa/api-controle-de-estoque.git
 
 # init
@@ -78,8 +82,8 @@ npm i
 npm run dev
 ```
 
-# autor 
+# Author 
 
 Abner José Felix Barbosa
 
-linkedin: https://www.linkedin.com/in/abner-jose-feliz-barbosa/
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/abner-jose-feliz-barbosa/)
