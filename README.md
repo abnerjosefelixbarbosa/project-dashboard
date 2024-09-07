@@ -1,14 +1,14 @@
 # Project dashboard 
 
-## About
+## Sobre
 
 Project dashboard
 
-## Model
+## Modelo
 
 ![project-dashbord-diagram-class drawio](https://github.com/abnerjosefelixbarbosa/project-dashboard/assets/21656485/8ec513cc-51ba-4c3e-a36c-971a559d064d)
 
-## Screens
+## Telas
 
 ![Captura de Tela (23)](https://github.com/abnerjosefelixbarbosa/cryptography/assets/21656485/df8ce7fa-982a-411e-8912-f9543dad2459)
 ![Captura de Tela (24)](https://github.com/abnerjosefelixbarbosa/cryptography/assets/21656485/7258a506-19d0-4058-93d5-0dc07e7599b8)
@@ -19,7 +19,7 @@ Project dashboard
 ![Captura de Tela (29)](https://github.com/abnerjosefelixbarbosa/cryptography/assets/21656485/87b7117b-c5ca-4a02-a9e9-9addee7dae9f)
 ![Captura de Tela (30)](https://github.com/abnerjosefelixbarbosa/cryptography/assets/21656485/46d41950-3180-4545-af07-0ea07d78cc28)
 
-# Project resource
+# Recussos do projeto
 
 ## Frontend
 
@@ -41,20 +41,20 @@ Project dashboard
 - Lombok
 - Spring boot segurity
 
-# Requirements 
+# Requerimentos 
 
-## Functional
+## Funcional
 
-- User must create account.
-- User must Login to the account.
-- System must list project by account ID.
+- O usuário deve criar conta.
+- O usuario deve logar na conta.
+- O sistema deve listar projetos pelo id da conta.
 - System must find account by id.
 - User must change account by id.
 - User must create project.
 - User must change project by id.
 - User must delete project by id.
   
-## Non functional
+## Não funcional
 
 - System development must be done with Springboot Java with react.
 - The database for development will be H2 data base.
@@ -65,11 +65,11 @@ Project dashboard
 - The response time for requests must be less than 10s.
 - The project will be structured with SOLID.
 
-# Project execution 
+# Execução do projeto 
 
-- Copy the repository into an IDE.
-- Execute the project.
-- Access the [API document](http://localhost:8080/swagger-ui/index.html) or another tool to test the API.
+- Copie o repositorio em uma IDE.
+- Execute o projeto.
+- Acesse a [documento da API](http://localhost:8080/swagger-ui/index.html) ou outra ferramenta para testar a API.
 
 ```bash
 # clone repository
@@ -82,7 +82,7 @@ npm i
 npm run dev
 ```
 
-# Author 
+# Autor
 
 Abner José Felix Barbosa
 
