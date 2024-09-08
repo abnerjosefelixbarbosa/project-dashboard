@@ -48,22 +48,22 @@ Project dashboard
 - O usuário deve criar conta.
 - O usuario deve logar na conta.
 - O sistema deve listar projetos pelo id da conta.
-- System must find account by id.
-- User must change account by id.
-- User must create project.
-- User must change project by id.
-- User must delete project by id.
+- O sistema deve encontra conta pelo id.
+- O usuário deve atualuzar conta pelo id.
+- O usuário deve criar projeto.
+- O usuário deve atualizar projeto pelo id.
+- O usuário deve deletar projeto pelo id.
   
 ## Não funcional
 
-- System development must be done with Springboot Java with react.
-- The database for development will be H2 data base.
-- User interfaces must be responsive.
-- Users can only have access to their projects.
-- User passwords must contain special characters and capital letters.
-- User passwords must have a maximum of 20 characters.
-- The response time for requests must be less than 10s.
-- The project will be structured with SOLID.
+- O desenvolvimento do sistema deve ser feito com java sprinboot e react.
+- O banco de dados para desenvolvimento vai ser em H2 data base.
+- A interface do usuário deve ser responsivo.
+- O usuários só podem ter acesso a seus projetos.
+- A senha dos usuários deve conter caracteres especiais e letras maiúsculas.
+- A senha do usuário deve ter no máximo de 20 caracteres.
+- O tempo de resposta das requisições deve ser menos de 10s.
+- O projeto vai ser estruturado com SOLID.
 
 # Execução do projeto 
 
