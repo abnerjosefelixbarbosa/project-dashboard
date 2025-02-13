@@ -2,7 +2,7 @@
 
 ## Sobre
 
-Project dashboard
+Gerenciador de plataforma de projetos
 
 ## Modelo
 
