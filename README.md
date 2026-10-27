@@ -37,7 +37,7 @@ Aplicação fullstack para gerenciamento de plataforma de projetos.
 - MVC
 - SOLID
 - H2 database
-- Swegger
+- Swagger
 - Lombok
 - Spring boot segurity
 
