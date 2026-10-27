@@ -2,7 +2,7 @@
 
 ## Sobre
 
-Gerenciador de plataforma de projetos
+Aplicação fullstack para gerenciamento de plataforma de projetos.
 
 ## Modelo
 
@@ -41,18 +41,16 @@ Gerenciador de plataforma de projetos
 - Lombok
 - Spring boot segurity
 
-# Requerimentos 
+## Funcionalidades
 
-## Funcionalides
-
-- Criar conta.
-- Logar na conta.
-- Listar projetos pelo id da conta.
-- Encontra conta pelo id.
-- Atualuzar conta pelo id.
-- Criar projeto.
-- Atualizar projeto pelo id.
-- Deletar projeto pelo id.
+- Criar conta
+- Logar na conta
+- Listar projetos pelo id da conta
+- Encontra conta pelo id
+- Atualuzar conta pelo id
+- Criar projeto
+- Atualizar projeto pelo id
+- Deletar projeto pelo id
 
 # Execução do projeto 
 
